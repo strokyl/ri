@@ -1,0 +1,6 @@
+Traitement sur le texte à faire dans l'ordre : 
+ - lowercase (mettre tout en minuscule)
+ - word delimiter (transformer en liste)
+ - remove stopwords (enlever les mots inutils)
+ - stemming (lemmatiser)
+ - ascii folding (virer les accents)
