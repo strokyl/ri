@@ -6,7 +6,7 @@
 //
 
 
-package generated;
+package com.insa.rila.xml;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -22,8 +22,8 @@ import javax.xml.bind.annotation.XmlValue;
 @XmlType(name = "", propOrder = {
     "value"
 })
-@XmlRootElement(name = "INFO")
-public class INFO {
+@XmlRootElement(name = "P")
+public class P {
 
     @XmlValue
     protected String value;

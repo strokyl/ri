@@ -6,7 +6,7 @@
 //
 
 
-package generated;
+package com.insa.rila.xml;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,72 +23,47 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "soustitre",
-    "pOrPHOTO"
+    "secOrPOrPHOTO"
 })
-@XmlRootElement(name = "SEC")
-public class SEC {
+@XmlRootElement(name = "RECIT")
+public class RECIT {
 
-    @XmlElement(name = "SOUS-TITRE")
-    protected String soustitre;
     @XmlElements({
-        @XmlElement(name = "P", required = true, type = P.class),
-        @XmlElement(name = "PHOTO", required = true, type = PHOTO.class)
+        @XmlElement(name = "SEC", type = SEC.class),
+        @XmlElement(name = "P", type = P.class),
+        @XmlElement(name = "PHOTO", type = PHOTO.class)
     })
-    protected List<Object> pOrPHOTO;
+    protected List<Object> secOrPOrPHOTO;
 
     /**
-     * Gets the value of the soustitre property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getSOUSTITRE() {
-        return soustitre;
-    }
-
-    /**
-     * Sets the value of the soustitre property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setSOUSTITRE(String value) {
-        this.soustitre = value;
-    }
-
-    /**
-     * Gets the value of the pOrPHOTO property.
+     * Gets the value of the secOrPOrPHOTO property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the pOrPHOTO property.
+     * This is why there is not a <CODE>set</CODE> method for the secOrPOrPHOTO property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getPOrPHOTO().add(newItem);
+     *    getSECOrPOrPHOTO().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
+     * {@link SEC }
      * {@link P }
      * {@link PHOTO }
      * 
      * 
      */
-    public List<Object> getPOrPHOTO() {
-        if (pOrPHOTO == null) {
-            pOrPHOTO = new ArrayList<Object>();
+    public List<Object> getSECOrPOrPHOTO() {
+        if (secOrPOrPHOTO == null) {
+            secOrPOrPHOTO = new ArrayList<Object>();
         }
-        return this.pOrPHOTO;
+        return this.secOrPOrPHOTO;
     }
 
 }

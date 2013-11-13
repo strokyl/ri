@@ -6,7 +6,7 @@
 //
 
 
-package generated;
+package com.insa.rila.xml;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,41 +22,41 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "item"
+    "info"
 })
-@XmlRootElement(name = "LISTE")
-public class LISTE {
+@XmlRootElement(name = "COMPLEMENTS")
+public class COMPLEMENTS {
 
-    @XmlElement(name = "ITEM", required = true)
-    protected List<ITEM> item;
+    @XmlElement(name = "INFO", required = true)
+    protected List<INFO> info;
 
     /**
-     * Gets the value of the item property.
+     * Gets the value of the info property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the item property.
+     * This is why there is not a <CODE>set</CODE> method for the info property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getITEM().add(newItem);
+     *    getINFO().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link ITEM }
+     * {@link INFO }
      * 
      * 
      */
-    public List<ITEM> getITEM() {
-        if (item == null) {
-            item = new ArrayList<ITEM>();
+    public List<INFO> getINFO() {
+        if (info == null) {
+            info = new ArrayList<INFO>();
         }
-        return this.item;
+        return this.info;
     }
 
 }
