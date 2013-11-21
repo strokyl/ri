@@ -62,7 +62,7 @@ public class IndexTest {
     public void testGetToken() {
         System.out.println("getToken");
         String content = "Je ne, suis, ; pas_un-héros. Faut|pas/croire ,,: (salut) \\ dieu l'ennuie";
-        List<String> expResult = java.util.Arrays.asList(new String[]{"Je", "ne", "suis", "pas", "un","héros", "Faut", "pas", "croire", "salut", "dieu", "l", "ennuie"});
+        List<String> expResult = java.util.Arrays.asList(new String[]{"Je", "ne", "suis", "pas", "un", "héros", "Faut", "pas", "croire", "salut", "dieu", "l", "ennuie"});
         List<String> result = Index.getToken(content);
         assertEquals(expResult, result);
     }
@@ -73,7 +73,7 @@ public class IndexTest {
     @Test
     public void testRemoveStopwords() throws FileNotFoundException, IOException {
         System.out.println("removeStopwords");
-        List<String> words = java.util.Arrays.asList(new String[]{"la", "mer", "est", "bleue"});
+        List<String> words = java.util.Arrays.asList(new String[]{"la", "mer", "est", "bleue","à"});
         List<String> expected = java.util.Arrays.asList(new String[]{"mer", "bleue"});
         List<String> real = Index.removeStopwords(words);
         assertEquals(expected, real);
@@ -88,7 +88,7 @@ public class IndexTest {
         System.out.println("stemming");
         List<String> words = java.util.Arrays.asList(new String[]{"balader", "baladaient", "balades"});
         List<String> expected = java.util.Arrays.asList(new String[]{"balad", "balad", "balad"});
-        List<String> result= Index.stemming(words);
+        List<String> result = Index.stemming(words);
         assertEquals(expected, result);
     }
 
@@ -136,5 +136,12 @@ public class IndexTest {
         expResult.put("Alice", 1);
         Map<String, Integer> result = Index.aggregate(words);
         assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testGetTokenOccurenceOfString() throws FileNotFoundException, IOException {
+        System.out.println("getTokenOccurenceOfString");
+        String text = "Shakespeare devine qu'il y a plus de choses sur la terre et dans le ciel qu'il n'en est rêvé dans notre philosophie; Claude Bernard constate que l'homme peut plus de choses qu'il ne croit en pouvoir; et c'est aussi ce qu'enseignent les prêtres. Poésie, science, religion, ces hautes révélations, inspirées et savantes, s'accordent à nous affirmer que nous sommes capables de prendre contact avec l'invisible, avec l'intangible, avec l'insaisissable, avec ce qui dépasse nos sens.";
+        System.out.println(Index.getTokenOccurenceOfString(text));
     }
 }

@@ -10,6 +10,7 @@ package com.insa.rila.index;
 import java.text.Normalizer;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -18,15 +19,12 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.tartarus.snowball.EnglishSnowballStemmerFactory;
 import org.tartarus.snowball.FrenchSnowballStemmerFactory;
 import org.tartarus.snowball.util.StemmerException;
-
-
-
 
 /**
  *
@@ -35,6 +33,24 @@ import org.tartarus.snowball.util.StemmerException;
 public class Index {
 
     public static final String WORD_DELIMITER_REGEXP = "(\\s|[-!?,.;:()_/\\\\'|\"])+";
+    private static Set<String> stopWords;
+
+    public static Set<String> getStopWords() throws FileNotFoundException, IOException {
+        if (stopWords == null) {
+            stopWords = new HashSet<String>();
+            String word;
+            Scanner sc = new Scanner(new File("stopliste.txt"), "UTF-8");
+            while(sc.hasNextLine()) {
+                word = sc.nextLine().trim().toLowerCase();
+                System.out.println(word);
+                stopWords.add(word);
+            }
+
+            sc.close();
+        }
+
+        return stopWords;
+    }
 
     public static String toLower(String content) {
         return content.toLowerCase();
@@ -51,13 +67,8 @@ public class Index {
     }
 
     public static List<String> removeStopwords(List<String> words) throws FileNotFoundException, IOException {
-        Set<String> stopWords = new HashSet<String>();
-        BufferedReader SW = new BufferedReader(new FileReader("stopliste.txt"));
-        for (String line; (line = SW.readLine()) != null;) {
-            stopWords.add(line.trim().toLowerCase());
-        }
-        SW.close();
 
+        Set<String> stopWords = getStopWords();
         List<String> newList = new LinkedList<String>();
         for (int i = 0; i < words.size(); i++) {
             if (!stopWords.contains(words.get(i))) {
@@ -75,11 +86,9 @@ public class Index {
      *             : discrinaient   -> discriminaient
      * @param words
      */
-
     public static List stemming(List<String> words) {
         List<String> test = new LinkedList<String>();
-        for(int i=0;i<words.size();i++)
-        {
+        for (int i = 0; i < words.size(); i++) {
             try {
                 test.add(FrenchSnowballStemmerFactory.getInstance().process(words.get(i)));
             } catch (StemmerException ex) {
@@ -129,6 +138,15 @@ public class Index {
             result.put(w, value);
         }
 
+        return result;
+    }
+
+    public static Map<String, Integer> getTokenOccurenceOfString(String text) throws FileNotFoundException, IOException {
+        Map<String, Integer> result = new HashMap<String, Integer>();
+        String lower = toLower(text);
+        List<String> words = removeStopwords(getToken(lower));
+        List<String> tokens = asciiFolding(stemming(words));
+        result = aggregate(tokens);
         return result;
     }
 }
