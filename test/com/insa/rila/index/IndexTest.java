@@ -61,9 +61,9 @@ public class IndexTest {
     @Test
     public void testGetToken() {
         System.out.println("getToken");
-        String content = "bonjour! tu vas bien? oui et toi! ca va, mais je verrais bien. Ok";
+        String content = "bonjour! tu vas bien? oui et toi! ca va, mais je verrais bien. ok";
         List<String> expResult = java.util.Arrays.asList(new String[]{"bonjour", "tu", "vas", "bien", "oui",
-        "et", "toi", "ca", "va", "mais", "je", "verrais", "bien","Ok"});
+        "et", "toi", "ca", "va", "mais", "je", "verrais", "bien","ok"});
 
         List result = Index.getToken(content);
         assertEquals(expResult, result);
@@ -88,10 +88,10 @@ public class IndexTest {
     @Test
     public void testStemming() {
         System.out.println("stemming");
-        List<String> words = null;
-        Index.stemming(words);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        List<String> words = java.util.Arrays.asList(new String[]{"balader", "baladaient", "balades"});
+        List<String> expected = java.util.Arrays.asList(new String[]{"balad", "balad", "balad"});
+        List<String> result= Index.stemming(words);
+        assertEquals(expected, result);
     }
 
     /**
