@@ -20,6 +20,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.tartarus.snowball.FrenchSnowballStemmerFactory;
+import org.tartarus.snowball.util.StemmerException;
+
+
+
 
 /**
  *
@@ -68,8 +75,17 @@ public class Index {
      *             : discrinaient   -> discriminaient
      * @param words
      */
-    public static void stemming(List<String> words) {
-
+    public static List stemming(List<String> words) {
+        List<String> test = new LinkedList<String>();
+        for(int i=0;i<words.size();i++)
+        {
+            try {
+                test.add(FrenchSnowballStemmerFactory.getInstance().process(words.get(i)));
+            } catch (StemmerException ex) {
+                Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return test;
     }
 
     /**

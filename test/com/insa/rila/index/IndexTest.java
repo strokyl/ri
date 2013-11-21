@@ -63,9 +63,9 @@ public class IndexTest {
     @Test
     public void testGetToken() {
         System.out.println("getToken");
-        String content = "Je ne, suis, ; pas_un-héros. Faut|pas/croire ,,: (salut) \\ dieu l'ennuie";
-        List<String> expResult = java.util.Arrays.asList(new String[]{"Je", "ne", "suis", "pas", "un",
-        "héros", "Faut", "pas", "croire", "salut", "dieu", "l", "ennuie"});
+        String content = "bonjour! tu vas bien? oui et toi! ca va, mais je verrais bien. Ok";
+        List<String> expResult = java.util.Arrays.asList(new String[]{"bonjour", "tu", "vas", "bien", "oui",
+        "et", "toi", "ca", "va", "mais", "je", "verrais", "bien","Ok"});
 
         List result = Index.getToken(content);
         assertEquals(expResult, result);
