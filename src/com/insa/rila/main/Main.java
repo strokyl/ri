@@ -5,8 +5,10 @@
 
 package com.insa.rila.main;
 
-import com.insa.rila.db.PostrGreFactory;
-import com.insa.rila.db.PostGreConnection;
+import com.insa.rila.index.Index;
+import java.util.ArrayList;
+
+
 
 /**
  *
@@ -17,9 +19,16 @@ public class Main {
     /**
      * @param args the command line arguments
      */
+
     public static void main(String[] args) {
-        PostrGreFactory fact = new PostrGreFactory();
-        PostGreConnection post = fact.getConnect();
+        String content = "bonjour! tu vas bien? oui et toi! ca va, mais je verrais bien. Ok";
+        ArrayList<String> words = new ArrayList<String>();
+        words = Index.wordelimiter(content);
+        for(int i=0;i<words.size();i++)
+        {
+            System.out.println(words.get(i));
+        }
+        //System.out.println(words.get(0).isEmpty());
     }
 
 }
