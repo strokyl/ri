@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.insa.rila.index;
 
 import java.util.Collection;
@@ -63,7 +62,7 @@ public class IndexTest {
         System.out.println("getToken");
         String content = "Je ne, suis, ; pas_un-héros. Faut|pas/croire ,,: (salut) \\ dieu l'ennuie";
         List<String> expResult = java.util.Arrays.asList(new String[]{"Je", "ne", "suis", "pas", "un",
-        "héros", "Faut", "pas", "croire", "salut", "dieu", "l", "ennuie"});
+                    "héros", "Faut", "pas", "croire", "salut", "dieu", "l", "ennuie"});
 
         List result = Index.getToken(content);
         assertEquals(expResult, result);
@@ -76,7 +75,8 @@ public class IndexTest {
     public void testRemoveStopwords() {
         System.out.println("removeStopwords");
         List<String> words = java.util.Arrays.asList(new String[]{"la", "mer", "est", "bleue"});
-        List<String> expected = java.util.Arrays.asList(new String[]{"mer", "bleue"});;
+        List<String> expected = java.util.Arrays.asList(new String[]{"mer", "bleue"});
+        ;
         Index.removeStopwords(words);
         assertEquals(expected, words);
     }
@@ -88,6 +88,7 @@ public class IndexTest {
     public void testStemming() {
         System.out.println("stemming");
         List<String> words = null;
+
         Index.stemming(words);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -99,10 +100,19 @@ public class IndexTest {
     @Test
     public void testAsciiFolding() {
         System.out.println("asciiFolding");
-        List<String> words = null;
-        Index.asciiFolding(words);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        List<String> words = java.util.Arrays.asList(new String[]{"là", "mère", "fût", "témeraire"});
+        List<String> expected = java.util.Arrays.asList(new String[]{"la", "mere", "fut", "temeraire"});
+        List<String> result = Index.asciiFolding(words);
+        assertEquals(expected, result);
+    }
+
+    /**
+     * Test of asciiFolding method, of class Index.
+     */
+    @Test
+    public void testAsciiFoldingOnWord() {
+        System.out.println("asciiFoldingOnWord");
+        assertEquals("Le poetes e a u e", Index.asciiFoldingOnWord("Le pôëtes é à ù è"));
     }
 
     /**
@@ -129,5 +139,4 @@ public class IndexTest {
         Map<String, Integer> result = Index.aggregate(words);
         assertEquals(expResult, result);
     }
-
 }

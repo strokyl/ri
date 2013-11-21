@@ -2,15 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.insa.rila.index;
-
 
 //import org.apache.lucene.analysis.*;
 //import org.apache.lucene.analysis.core.WhitespaceTokenizer;
 //import org.apache.lucene.analysis.miscellaneous.WordDelimiterFilter;
-
+import java.text.Normalizer;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -21,17 +20,16 @@ import java.util.Map;
  */
 public class Index {
 
-    public static final String WORD_DELIMITER_REGEXP = "(\\s|[-,.;:()_/\\\\'#@|\"])+";
+    public static final String WORD_DELIMITER_REGEXP = "(\\s|[-,.;:()_/\\\\'|\"])+";
 
-    public static String toLower (String content)
-    {
+    public static String toLower(String content) {
         return content.toLowerCase();
     }
 
-    public static List<String> getToken (String content) {
+    public static List<String> getToken(String content) {
         List<String> result = new LinkedList<String>();
 
-        for(String s : content.split(WORD_DELIMITER_REGEXP) ) {
+        for (String s : content.split(WORD_DELIMITER_REGEXP)) {
             result.add(s);
         }
 
@@ -39,7 +37,6 @@ public class Index {
     }
 
     public static void removeStopwords(List<String> words) {
-        
     }
 
     /**
@@ -48,16 +45,28 @@ public class Index {
      *             : discrinaient   -> discriminaient
      * @param words
      */
-    public static void stemming(List<String> words) {
-
+    public static List<String> stemming(List<String> words) {
+        return null;
     }
 
     /**
      * Replace all accent into correspondig ascii caractere in a token list
      * @param words
      */
-    public static void asciiFolding(List<String> words) {
+    public static List<String> asciiFolding(List<String> words) {
+        List<String> result = new LinkedList<String>();
+        
+        for(String word : words) {
+            result.add(asciiFoldingOnWord(word));
+        }
 
+        return result;
+    }
+
+    public static String asciiFoldingOnWord(String word) {
+        String result = Normalizer.normalize(word, Normalizer.Form.NFD);
+        result = result.replaceAll("[^\\p{ASCII}]", "");
+        return result;
     }
 
     /**
@@ -70,10 +79,10 @@ public class Index {
         Map<String, Integer> result = new HashMap<String, Integer>();
 
         int value;
-        for(String w : words) {
+        for (String w : words) {
             value = 1;
 
-            if(result.containsKey(w)) {
+            if (result.containsKey(w)) {
                 value += result.get(w);
             }
 
@@ -82,5 +91,4 @@ public class Index {
 
         return result;
     }
-
 }
