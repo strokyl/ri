@@ -74,7 +74,7 @@ public class Index {
      *             : discrinaient   -> discriminaient
      * @param words
      */
-<<<<<<< HEAD
+
     public static List stemming(List<String> words) {
         List<String> test = new LinkedList<String>();
         for(int i=0;i<words.size();i++)
@@ -86,10 +86,6 @@ public class Index {
             }
         }
         return test;
-=======
-    public static List<String> stemming(List<String> words) {
-        return null;
->>>>>>> 278dbd765b8c80cd0bfb53e0763bf36d32e7c6b9
     }
 
     /**
