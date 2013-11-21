@@ -4,16 +4,15 @@
 // Any modifications to this file will be lost upon recompilation of the source schema. 
 // Generated on: 2013.11.04 at 07:04:46 PM CET 
 //
-
-
 package com.insa.rila.xml;
 
+import java.util.LinkedList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-
 
 /**
  * 
@@ -59,7 +58,7 @@ public class BALADE {
     }
 
     /**
-    * Gets the value of the recit property.
+     * Gets the value of the recit property.
      * 
      * @return
      *     possible object is
@@ -106,4 +105,100 @@ public class BALADE {
         this.complements = value;
     }
 
+    /**
+     * Renvoie tout les paragraphes contenu dans cette object balade
+     * @param xmlUrl url relative par rapport au repertoire courant du fichier xml
+     * correspondant à balade. Permet de transmettre cette info au paragraphe p.
+     * @return
+     */
+    public List<Paragraph> getParagrah(String xmlUrl) {
+        LinkedList<Paragraph> result = new LinkedList<Paragraph>();
+
+        StringBuilder builder;
+
+        //ces variables correspondent au info à mettre dans les paragraphes
+        String textParagraph;
+        String textTitre = this.getPRESENTATION().getTITRE();
+        String textSousTitre;
+        String textDescription = "";
+
+        Paragraph current;
+
+        int xpathIndex = 1;
+        builder = new StringBuilder();
+
+        if (this.getPRESENTATION().getDESCRIPTION() != null) {
+            //d'abord on construit les paragraphe présent dans la descripton
+            for (P p : this.getPRESENTATION().getDESCRIPTION().getP()) {
+                current = new Paragraph();
+                textParagraph = p.getvalue();
+
+                current.setTextParagraph(textParagraph);
+                current.setTextTitre(textTitre);
+                current.setXmlPath(String.format("/BALADE[1]/PRESENTATION[1]/DESCRIPTION[1]/P[%d]", xpathIndex));
+                current.setXmlUrl(xmlUrl);
+                result.add(current);
+
+                builder.append(textParagraph);
+                builder.append(" \n");
+                xpathIndex++;
+            }
+            textDescription = builder.toString();
+
+        }
+
+        P p;
+        SEC s;
+        int xpathIndexP = 1;
+        int xpathIndexS = 1;
+        int xpathIndexSP;
+        //puis ceux présent dans le recit
+        for (Object o : this.getRECIT().getSECOrPOrPHOTO()) {
+
+            //certain sont directement dans le recit
+            if (o instanceof P) {
+                p = (P) o;
+                current = new Paragraph();
+                textParagraph = p.getvalue();
+
+                current.setTextParagraph(textParagraph);
+                current.setTextTitre(textTitre);
+                current.setTextDescription(textDescription);
+                current.setXmlPath(String.format("/BALADE[1]/RECIT[1]/P[%d]", xpathIndexP));
+                current.setXmlUrl(xmlUrl);
+                result.add(current);
+
+                xpathIndexP++;
+
+                //d'autre dans des sections du recit
+            } else if (o instanceof SEC) {
+                s = (SEC) o;
+                textSousTitre = s.getSOUSTITRE();
+                xpathIndexSP = 1;
+
+                for (Object o_ : s.getPOrPHOTO()) {
+                    if (o_ instanceof P) {
+                        p = (P) o_;
+                        current = new Paragraph();
+                        textParagraph = p.getvalue();
+
+                        current.setTextParagraph(textParagraph);
+                        current.setTextTitre(textTitre);
+                        current.setTextDescription(textDescription);
+                        current.setTextSousTitre(textSousTitre);
+                        current.setXmlPath(String.format("/BALADE[1]/RECIT[1]/SEC[%d]/P[%d]", xpathIndexS, xpathIndexSP));
+                        current.setXmlUrl(xmlUrl);
+                        result.add(current);
+
+                        xpathIndexSP++;
+                    }
+                }
+
+                xpathIndexS++;
+            }
+        }
+
+
+        return result;
+    }
 }
