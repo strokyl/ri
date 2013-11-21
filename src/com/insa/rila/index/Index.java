@@ -5,6 +5,11 @@
 
 package com.insa.rila.index;
 
+
+//import org.apache.lucene.analysis.*;
+//import org.apache.lucene.analysis.core.WhitespaceTokenizer;
+//import org.apache.lucene.analysis.miscellaneous.WordDelimiterFilter;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;

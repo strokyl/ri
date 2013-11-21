@@ -5,6 +5,11 @@
 
 package com.insa.rila.index;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -43,11 +48,86 @@ public class IndexTest {
     @Test
     public void testToLower() {
         System.out.println("toLower");
-        String content = "Test De lOwerCase";
-        String expResult = "test de lowercase";
+        String content = "Test De lOwerCase, je ne Suis PAs un HÉros";
+        String expResult = "test de lowercase, je ne suis pas un héros";
         String result = Index.toLower(content);
         assertEquals(expResult, result);
         System.out.println(result);
+    }
+
+    /**
+     * Test of getToken method, of class Index.
+     */
+    @Test
+    public void testGetToken() {
+        System.out.println("getToken");
+        String content = "Je ne, suis, ; pas_un-héros. Faut|pas/croire ,,: (salut) \\ dieu l'ennuie";
+        List<String> expResult = java.util.Arrays.asList(new String[]{"Je", "ne", "suis", "pas", "un",
+        "héros", "Faut", "pas", "croire", "salut", "dieu", "l", "ennuie"});
+
+        List result = Index.getToken(content);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of removeStopwords method, of class Index.
+     */
+    @Test
+    public void testRemoveStopwords() {
+        System.out.println("removeStopwords");
+        List<String> words = java.util.Arrays.asList(new String[]{"la", "mer", "est", "bleue"});
+        List<String> expected = java.util.Arrays.asList(new String[]{"mer", "bleue"});;
+        Index.removeStopwords(words);
+        assertEquals(expected, words);
+    }
+
+    /**
+     * Test of stemming method, of class Index.
+     */
+    @Test
+    public void testStemming() {
+        System.out.println("stemming");
+        List<String> words = null;
+        Index.stemming(words);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of asciiFolding method, of class Index.
+     */
+    @Test
+    public void testAsciiFolding() {
+        System.out.println("asciiFolding");
+        List<String> words = null;
+        Index.asciiFolding(words);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of aggregate method, of class Index.
+     */
+    @Test
+    public void testAggregate() {
+        System.out.println("aggregate");
+        List<String> words = new LinkedList<String>();
+        words.add("salut");
+        words.add("salu");
+        words.add("salut");
+        words.add("Pierre");
+        words.add("salut");
+        words.add("Alice");
+        words.add("salut");
+        words.add("Pierre");
+
+        Map<String, Integer> expResult = new HashMap<String, Integer>();
+        expResult.put("salut", 4);
+        expResult.put("salu", 1);
+        expResult.put("Pierre", 2);
+        expResult.put("Alice", 1);
+        Map<String, Integer> result = Index.aggregate(words);
+        assertEquals(expResult, result);
     }
 
 }
