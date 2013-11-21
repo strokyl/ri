@@ -4,7 +4,8 @@
  */
 package com.insa.rila.index;
 
-import java.util.Collection;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -62,7 +63,7 @@ public class IndexTest {
         System.out.println("getToken");
         String content = "Je ne, suis, ; pas_un-héros. Faut|pas/croire ,,: (salut) \\ dieu l'ennuie";
         List<String> expResult = java.util.Arrays.asList(new String[]{"Je", "ne", "suis", "pas", "un",
-                    "héros", "Faut", "pas", "croire", "salut", "dieu", "l", "ennuie"});
+        "héros", "Faut", "pas", "croire", "salut", "dieu", "l", "ennuie"});
 
         List result = Index.getToken(content);
         assertEquals(expResult, result);
@@ -72,13 +73,13 @@ public class IndexTest {
      * Test of removeStopwords method, of class Index.
      */
     @Test
-    public void testRemoveStopwords() {
+    public void testRemoveStopwords() throws FileNotFoundException, IOException {
         System.out.println("removeStopwords");
         List<String> words = java.util.Arrays.asList(new String[]{"la", "mer", "est", "bleue"});
         List<String> expected = java.util.Arrays.asList(new String[]{"mer", "bleue"});
-        ;
-        Index.removeStopwords(words);
-        assertEquals(expected, words);
+        List<String> real = Index.removeStopwords(words);
+        assertEquals(expected, real);
+        System.out.println(real);
     }
 
     /**
@@ -88,7 +89,6 @@ public class IndexTest {
     public void testStemming() {
         System.out.println("stemming");
         List<String> words = null;
-
         Index.stemming(words);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
