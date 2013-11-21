@@ -33,7 +33,7 @@ import org.tartarus.snowball.util.StemmerException;
  */
 public class Index {
 
-    public static final String WORD_DELIMITER_REGEXP = "(\\s|[-,.;:()_/\\\\'|\"])+";
+    public static final String WORD_DELIMITER_REGEXP = "(\\s|[-!?,.;:()_/\\\\'|\"])+";
 
     public static String toLower(String content) {
         return content.toLowerCase();
