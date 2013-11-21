@@ -23,12 +23,7 @@ public class Main {
     public static void main(String[] args) {
         String content = "bonjour! tu vas bien? oui et toi! ca va, mais je verrais bien. Ok";
         ArrayList<String> words = new ArrayList<String>();
-        words = Index.wordelimiter(content);
-        for(int i=0;i<words.size();i++)
-        {
-            System.out.println(words.get(i));
-        }
-        //System.out.println(words.get(0).isEmpty());
+
     }
 
 }

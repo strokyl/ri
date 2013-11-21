@@ -10,10 +10,16 @@ package com.insa.rila.index;
 //import org.apache.lucene.analysis.core.WhitespaceTokenizer;
 //import org.apache.lucene.analysis.miscellaneous.WordDelimiterFilter;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -38,8 +44,22 @@ public class Index {
         return result;
     }
 
-    public static void removeStopwords(List<String> words) {
-        
+    public static List removeStopwords(List<String> words) throws FileNotFoundException, IOException {
+        Set<String> stopWords = new LinkedHashSet<String>();
+        BufferedReader SW= new BufferedReader(new FileReader("stopliste.txt"));
+        for(String line;(line = SW.readLine()) != null;)
+           stopWords.add(line.trim());
+        SW.close();
+
+       List<String> newList = new LinkedList<String>();
+       for(int i=0;i<words.size();i++)
+       {
+           if(!stopWords.contains(words.get(i)))
+               newList.add(words.get(i));
+           
+       }
+       return newList;
+
     }
 
     /**

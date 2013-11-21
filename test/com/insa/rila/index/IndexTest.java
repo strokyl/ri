@@ -5,6 +5,8 @@
 
 package com.insa.rila.index;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -73,12 +75,13 @@ public class IndexTest {
      * Test of removeStopwords method, of class Index.
      */
     @Test
-    public void testRemoveStopwords() {
+    public void testRemoveStopwords() throws FileNotFoundException, IOException {
         System.out.println("removeStopwords");
         List<String> words = java.util.Arrays.asList(new String[]{"la", "mer", "est", "bleue"});
         List<String> expected = java.util.Arrays.asList(new String[]{"mer", "bleue"});;
-        Index.removeStopwords(words);
-        assertEquals(expected, words);
+        List<String> real = Index.removeStopwords(words);
+        assertEquals(expected, real);
+        System.out.println(real);
     }
 
     /**
