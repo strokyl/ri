@@ -2,12 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.insa.rila.index;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -78,7 +76,7 @@ public class IndexTest {
     public void testRemoveStopwords() throws FileNotFoundException, IOException {
         System.out.println("removeStopwords");
         List<String> words = java.util.Arrays.asList(new String[]{"la", "mer", "est", "bleue"});
-        List<String> expected = java.util.Arrays.asList(new String[]{"mer", "bleue"});;
+        List<String> expected = java.util.Arrays.asList(new String[]{"mer", "bleue"});
         List<String> real = Index.removeStopwords(words);
         assertEquals(expected, real);
         System.out.println(real);
@@ -102,10 +100,19 @@ public class IndexTest {
     @Test
     public void testAsciiFolding() {
         System.out.println("asciiFolding");
-        List<String> words = null;
-        Index.asciiFolding(words);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        List<String> words = java.util.Arrays.asList(new String[]{"là", "mère", "fût", "témeraire"});
+        List<String> expected = java.util.Arrays.asList(new String[]{"la", "mere", "fut", "temeraire"});
+        List<String> result = Index.asciiFolding(words);
+        assertEquals(expected, result);
+    }
+
+    /**
+     * Test of asciiFolding method, of class Index.
+     */
+    @Test
+    public void testAsciiFoldingOnWord() {
+        System.out.println("asciiFoldingOnWord");
+        assertEquals("Le poetes e a u e", Index.asciiFoldingOnWord("Le pôëtes é à ù è"));
     }
 
     /**
@@ -132,5 +139,4 @@ public class IndexTest {
         Map<String, Integer> result = Index.aggregate(words);
         assertEquals(expResult, result);
     }
-
 }

@@ -2,20 +2,19 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.insa.rila.index;
-
 
 //import org.apache.lucene.analysis.*;
 //import org.apache.lucene.analysis.core.WhitespaceTokenizer;
 //import org.apache.lucene.analysis.miscellaneous.WordDelimiterFilter;
+import java.text.Normalizer;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -34,38 +33,38 @@ import org.tartarus.snowball.util.StemmerException;
  */
 public class Index {
 
-    public static final String WORD_DELIMITER_REGEXP = "(\\s|[-,.;:()_/\\\\'#@|\"])+";
+    public static final String WORD_DELIMITER_REGEXP = "(\\s|[-,.;:()_/\\\\'|\"])+";
 
-    public static String toLower (String content)
-    {
+    public static String toLower(String content) {
         return content.toLowerCase();
     }
 
-    public static List<String> getToken (String content) {
+    public static List<String> getToken(String content) {
         List<String> result = new LinkedList<String>();
 
-        for(String s : content.split(WORD_DELIMITER_REGEXP) ) {
+        for (String s : content.split(WORD_DELIMITER_REGEXP)) {
             result.add(s);
         }
 
         return result;
     }
 
-    public static List removeStopwords(List<String> words) throws FileNotFoundException, IOException {
-        Set<String> stopWords = new LinkedHashSet<String>();
-        BufferedReader SW= new BufferedReader(new FileReader("stopliste.txt"));
-        for(String line;(line = SW.readLine()) != null;)
-           stopWords.add(line.trim());
+    public static List<String> removeStopwords(List<String> words) throws FileNotFoundException, IOException {
+        Set<String> stopWords = new HashSet<String>();
+        BufferedReader SW = new BufferedReader(new FileReader("stopliste.txt"));
+        for (String line; (line = SW.readLine()) != null;) {
+            stopWords.add(line.trim().toLowerCase());
+        }
         SW.close();
 
-       List<String> newList = new LinkedList<String>();
-       for(int i=0;i<words.size();i++)
-       {
-           if(!stopWords.contains(words.get(i)))
-               newList.add(words.get(i));
-           
-       }
-       return newList;
+        List<String> newList = new LinkedList<String>();
+        for (int i = 0; i < words.size(); i++) {
+            if (!stopWords.contains(words.get(i))) {
+                newList.add(words.get(i));
+            }
+
+        }
+        return newList;
 
     }
 
@@ -75,6 +74,7 @@ public class Index {
      *             : discrinaient   -> discriminaient
      * @param words
      */
+<<<<<<< HEAD
     public static List stemming(List<String> words) {
         List<String> test = new LinkedList<String>();
         for(int i=0;i<words.size();i++)
@@ -86,14 +86,30 @@ public class Index {
             }
         }
         return test;
+=======
+    public static List<String> stemming(List<String> words) {
+        return null;
+>>>>>>> 278dbd765b8c80cd0bfb53e0763bf36d32e7c6b9
     }
 
     /**
      * Replace all accent into correspondig ascii caractere in a token list
      * @param words
      */
-    public static void asciiFolding(List<String> words) {
+    public static List<String> asciiFolding(List<String> words) {
+        List<String> result = new LinkedList<String>();
 
+        for (String word : words) {
+            result.add(asciiFoldingOnWord(word));
+        }
+
+        return result;
+    }
+
+    public static String asciiFoldingOnWord(String word) {
+        String result = Normalizer.normalize(word, Normalizer.Form.NFD);
+        result = result.replaceAll("[^\\p{ASCII}]", "");
+        return result;
     }
 
     /**
@@ -106,10 +122,10 @@ public class Index {
         Map<String, Integer> result = new HashMap<String, Integer>();
 
         int value;
-        for(String w : words) {
+        for (String w : words) {
             value = 1;
 
-            if(result.containsKey(w)) {
+            if (result.containsKey(w)) {
                 value += result.get(w);
             }
 
@@ -118,5 +134,4 @@ public class Index {
 
         return result;
     }
-
 }
