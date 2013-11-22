@@ -73,7 +73,7 @@ public class IndexTest {
     @Test
     public void testRemoveStopwords() throws FileNotFoundException, IOException {
         System.out.println("removeStopwords");
-        List<String> words = java.util.Arrays.asList(new String[]{"la", "mer", "est", "bleue","à"});
+        List<String> words = java.util.Arrays.asList(new String[]{"la", "mer", "est", "bleue", "à"});
         List<String> expected = java.util.Arrays.asList(new String[]{"mer", "bleue"});
         List<String> real = Index.removeStopwords(words);
         assertEquals(expected, real);
@@ -138,10 +138,41 @@ public class IndexTest {
         assertEquals(expResult, result);
     }
 
+    /**
+     * Test of getTokenOccurenceOfString method, of class Index.
+     */
     @Test
     public void testGetTokenOccurenceOfString() throws FileNotFoundException, IOException {
         System.out.println("getTokenOccurenceOfString");
         String text = "Shakespeare devine qu'il y a plus de choses sur la terre et dans le ciel qu'il n'en est rêvé dans notre philosophie; Claude Bernard constate que l'homme peut plus de choses qu'il ne croit en pouvoir; et c'est aussi ce qu'enseignent les prêtres. Poésie, science, religion, ces hautes révélations, inspirées et savantes, s'accordent à nous affirmer que nous sommes capables de prendre contact avec l'invisible, avec l'intangible, avec l'insaisissable, avec ce qui dépasse nos sens.";
         System.out.println(Index.getTokenOccurenceOfString(text));
+    }
+
+    /**
+     * Test of mergeMapOfToken method, of class Index.
+     */
+    @Test
+    public void testMergeMapOfToken() {
+        System.out.println("mergeMapOfToken");
+        float coeff[] = new float[]{1.0f, 2.0f};
+     
+        Map<String, Integer> map1 = new HashMap<String, Integer>();
+        Map<String, Integer> map2 = new HashMap<String, Integer>();
+        Map<String, Float> expected = new HashMap<String, Float>();
+        Map<String, Float> result;
+
+        map1.put("Luc", 1);
+        map1.put("Alice", 2);
+
+        map2.put("Luc", 2);
+        map2.put("Pierre", 1);
+
+        expected.put("Luc", 5.0f);
+        expected.put("Alice", 2.0f);
+        expected.put("Pierre", 2.0f);
+
+        result = Index.mergeMapOfToken(new float[]{1.0f, 2.0f}, map1, map2);
+
+        assertEquals(expected, result);
     }
 }

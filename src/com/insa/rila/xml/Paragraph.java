@@ -26,6 +26,7 @@ public class Paragraph {
         this.textSousTitre = "";
         this.textDescription = "";
     }
+    
     public String getTextDescription() {
         return textDescription;
     }

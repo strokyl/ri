@@ -7,6 +7,7 @@ package com.insa.rila.index;
 //import org.apache.lucene.analysis.*;
 //import org.apache.lucene.analysis.core.WhitespaceTokenizer;
 //import org.apache.lucene.analysis.miscellaneous.WordDelimiterFilter;
+import com.sun.tools.corba.se.idl.InvalidArgument;
 import java.text.Normalizer;
 
 import java.io.BufferedReader;
@@ -40,7 +41,7 @@ public class Index {
             stopWords = new HashSet<String>();
             String word;
             Scanner sc = new Scanner(new File("stopliste.txt"), "UTF-8");
-            while(sc.hasNextLine()) {
+            while (sc.hasNextLine()) {
                 word = sc.nextLine().trim().toLowerCase();
                 System.out.println(word);
                 stopWords.add(word);
@@ -141,12 +142,52 @@ public class Index {
         return result;
     }
 
+    /**
+     *
+     * @param text
+     * @return return a map with all token found in the text and there occurence, token only contain ascii password
+     * and are stemmed, stopword are removed
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
     public static Map<String, Integer> getTokenOccurenceOfString(String text) throws FileNotFoundException, IOException {
         Map<String, Integer> result = new HashMap<String, Integer>();
         String lower = toLower(text);
         List<String> words = removeStopwords(getToken(lower));
         List<String> tokens = asciiFolding(stemming(words));
         result = aggregate(tokens);
+        return result;
+    }
+
+    /**
+     * Prends un ensemble de map token occurence et le merge avec des coeffs spécifique
+     * @param coeffs
+     * @param maps
+     * @return
+     */
+    public static Map<String, Float> mergeMapOfToken(float[] coeffs, Map<String, Integer>... maps) {
+        if (coeffs.length != maps.length) {
+            throw new RuntimeException("coeffs size should be equals to maps size");
+        }
+
+        Map<String, Float> result = new HashMap<String, Float>();
+
+        float currentCoeff;
+        float value;
+        Map<String, Integer> currentMap;
+        for (int i = 0; i < coeffs.length; i++) {
+            currentCoeff = coeffs[i];
+            currentMap = maps[i];
+
+            for (String token : currentMap.keySet()) {
+                value = currentMap.get(token).floatValue()*currentCoeff;
+                if (result.containsKey(token)) {
+                    value += result.get(token);
+                }
+                result.put(token, value);
+            }
+        }
+        
         return result;
     }
 }
