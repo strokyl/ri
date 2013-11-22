@@ -4,3 +4,58 @@ Traitement sur le texte à faire dans l'ordre :
  - remove stopwords (enlever les mots inutils)
  - stemming (lemmatiser)
  - ascii folding (virer les accents)
+
+ Paragraph_brut :
+    String avec le texte du paragraph
+           avec le texte du titre
+           avec le texte du sous titre
+           avec le texte de la description
+
+ -> jusqu'à stemming
+
+ Paragraph_brut :
+    List<token> paragraph
+                titre
+                sous_titre
+                description
+
+    Aggregate(List<Paragrah_brut> paragraphs)
+    -> Set<Terme> = {}
+    -> Set<Paragrah> = {}
+    
+    -> for p in paragraphs
+        ajouter paragraph dans set paragraph
+        index = O
+        Set terme_paragraph = {}
+        Set apparition = {}
+
+        for token in paragraph.titre
+            if token in apparition:
+                update(apparition)
+            else:
+                ajouter token dans set apparition
+
+            if token in terme
+                recuperer terme_paragraph ou créer si il n'existe pas
+            else
+                creer token et creer terme_paragraph correspondant
+
+            if token terme_paragraph:
+                update terme_paragraph
+            else:
+                ajouter token dans terme_paragraph
+            index++
+
+
+        Set titre = {}
+        idem
+
+        Set sous_titre = {}
+        idem
+
+        Set description = {}
+        idem
+
+        
+
+        
