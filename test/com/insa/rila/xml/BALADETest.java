@@ -47,10 +47,10 @@ public class BALADETest {
         System.out.println("getParagrah");
         String xmlUrl = "Collection/d001.xml";
         BALADE instance = Parser.parseFile(new File(xmlUrl));
-        List<Paragraph> result = instance.getParagrah(xmlUrl);
+        List<ParagraphBrut> result = instance.getParagrah(xmlUrl);
         assertEquals(32, result.size());
 
-        for (Paragraph p : result) {
+        for (ParagraphBrut p : result) {
             assertEquals("Voyage aux Pyrénées", p.getTextTitre());
             assertEquals(xmlUrl, p.getXmlUrl());
         }
@@ -76,7 +76,7 @@ public class BALADETest {
         result = instance.getParagrah(xmlUrl);
         assertEquals(30, result.size());
 
-        for (Paragraph p : result) {
+        for (ParagraphBrut p : result) {
             assertEquals("Voyage aux Pyrénées", p.getTextTitre());
             assertEquals(xmlUrl, p.getXmlUrl());
         }

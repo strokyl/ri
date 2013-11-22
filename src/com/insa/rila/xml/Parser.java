@@ -60,9 +60,9 @@ public class Parser {
      * @return
      * @throws JAXBException
      */
-    public static List<Paragraph> parseDirectoryToParagraph(String urlDir) throws JAXBException {
-        List<Paragraph> result = new LinkedList<Paragraph>();
-        List<Paragraph> current;
+    public static List<ParagraphBrut> parseDirectoryToParagraph(String urlDir) throws JAXBException {
+        List<ParagraphBrut> result = new LinkedList<ParagraphBrut>();
+        List<ParagraphBrut> current;
         Map<String, BALADE> map = parseDirectoryToBalades(urlDir);
 
         for(String urlPath : map.keySet()) {

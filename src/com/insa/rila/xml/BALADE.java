@@ -111,8 +111,8 @@ public class BALADE {
      * correspondant à balade. Permet de transmettre cette info au paragraphe p.
      * @return
      */
-    public List<Paragraph> getParagrah(String xmlUrl) {
-        LinkedList<Paragraph> result = new LinkedList<Paragraph>();
+    public List<ParagraphBrut> getParagrah(String xmlUrl) {
+        LinkedList<ParagraphBrut> result = new LinkedList<ParagraphBrut>();
 
         StringBuilder builder;
 
@@ -122,7 +122,7 @@ public class BALADE {
         String textSousTitre;
         String textDescription = "";
 
-        Paragraph current;
+        ParagraphBrut current;
 
         int xpathIndex = 1;
         builder = new StringBuilder();
@@ -130,7 +130,7 @@ public class BALADE {
         if (this.getPRESENTATION().getDESCRIPTION() != null) {
             //d'abord on construit les paragraphe présent dans la descripton
             for (P p : this.getPRESENTATION().getDESCRIPTION().getP()) {
-                current = new Paragraph();
+                current = new ParagraphBrut();
                 textParagraph = p.getvalue();
 
                 current.setTextParagraph(textParagraph);
@@ -158,7 +158,7 @@ public class BALADE {
             //certain sont directement dans le recit
             if (o instanceof P) {
                 p = (P) o;
-                current = new Paragraph();
+                current = new ParagraphBrut();
                 textParagraph = p.getvalue();
 
                 current.setTextParagraph(textParagraph);
@@ -179,7 +179,7 @@ public class BALADE {
                 for (Object o_ : s.getPOrPHOTO()) {
                     if (o_ instanceof P) {
                         p = (P) o_;
-                        current = new Paragraph();
+                        current = new ParagraphBrut();
                         textParagraph = p.getvalue();
 
                         current.setTextParagraph(textParagraph);

@@ -4,6 +4,9 @@
  */
 package com.insa.rila.xml;
 
+import com.insa.rila.index.Index;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -19,6 +22,11 @@ public class ParagraphBrut {
     private String textSousTitre;
     private String textDescription;
 
+    private List<String> tokenParagraph;
+    private List<String> tokenTitre;
+    private List<String> tokenSousTitre;
+    private List<String> tokenDescription;
+
     public ParagraphBrut() {
         this.xmlPath = "";
         this.xmlUrl = "";
@@ -28,24 +36,31 @@ public class ParagraphBrut {
         this.textDescription = "";
     }
 
+    public void computeToken() throws FileNotFoundException, IOException {
+        tokenParagraph = Index.getTokenList(textParagraph);
+        tokenTitre = Index.getTokenList(textTitre);
+        tokenDescription = Index.getTokenList(textDescription);
+        tokenSousTitre = Index.getTokenList(textSousTitre);
+    }
+
     public String getTextDescription() {
-        return null;
+        return textDescription;
     }
 
     public List<String> getTokenDescription() {
-        return null;
+        return tokenDescription;
     }
 
     public List<String> getTokenTitre() {
-        return null;
+        return tokenTitre;
     }
 
     public List<String> getTokenSousTitre() {
-        return null;
+        return tokenSousTitre;
     }
 
     public List<String> getTokenParagraph() {
-        return null;
+        return tokenParagraph;
     }
 
     public void setTextDescription(String textDescription) {

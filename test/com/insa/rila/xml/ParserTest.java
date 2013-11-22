@@ -28,7 +28,7 @@ public class ParserTest {
         private String xmlUrl;
         private String xmlPath;
 
-        public ParagraphIdentifier(Paragraph p) {
+        public ParagraphIdentifier(ParagraphBrut p) {
             this.xmlPath = p.getXmlPath();
             this.xmlUrl = p.getXmlUrl();
         }
@@ -111,7 +111,7 @@ public class ParserTest {
         Set<ParagraphIdentifier> expected = new HashSet<ParagraphIdentifier>();
 
         ParagraphIdentifier pi;
-        for (Paragraph p : Parser.parseDirectoryToParagraph("./Collection")) {
+        for (ParagraphBrut p : Parser.parseDirectoryToParagraph("./Collection")) {
             pi = new ParagraphIdentifier(p);
             result.add(pi);
         }

@@ -10,10 +10,8 @@ package com.insa.rila.index;
 
 import java.text.Normalizer;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -43,7 +41,6 @@ public class Index {
             Scanner sc = new Scanner(new File("stopliste.txt"), "UTF-8");
             while (sc.hasNextLine()) {
                 word = sc.nextLine().trim().toLowerCase();
-                System.out.println(word);
                 stopWords.add(word);
             }
 
@@ -152,13 +149,11 @@ public class Index {
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public static Map<String, Integer> getTokenOccurenceOfString(String text) throws FileNotFoundException, IOException {
-        Map<String, Integer> result = new HashMap<String, Integer>();
+    public static List<String> getTokenList(String text) throws FileNotFoundException, IOException {
         String lower = toLower(text);
         List<String> words = removeStopwords(getToken(lower));
         List<String> tokens = asciiFolding(stemming(words));
-        result = aggregate(tokens);
-        return result;
+        return tokens;
     }
 
     /**
