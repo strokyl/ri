@@ -22,7 +22,7 @@ Traitement sur le texte à faire dans l'ordre :
     Aggregate(List<Paragrah_brut> paragraphs)
     -> Set<Terme> = {}
     -> Set<Paragrah> = {}
-    
+    // set Document + maj nbsommeappterme dans paragraphe
     -> for p in paragraphs
         ajouter paragraph dans set paragraph
         index = O

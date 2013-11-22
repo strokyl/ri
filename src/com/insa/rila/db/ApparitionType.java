@@ -11,46 +11,17 @@ import java.util.List;
  *
  * @author adrien
  */
-class ApparitionType {
+public enum ApparitionType
+{
+    TITRE("titre"),SOUS_TITRE("sous titre"),PARAGRAPHE("paragraphe"),DESCRIPTION("description");
 
-    private int id;
-    private String type;
-    private int ponderation;
-    private List<Apparition> apparitions;
+    private String name;
+    private ApparitionType(String name)
+    {
+        this.name=name;
 
-    public List<Apparition> getApparitions() {
-        return apparitions;
     }
-
-    public void setApparitions(List<Apparition> apparitions) {
-        this.apparitions = apparitions;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getPonderation() {
-        return ponderation;
-    }
-
-    public void setPonderation(int ponderation) {
-        this.ponderation = ponderation;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    
-
 
 }
+
+

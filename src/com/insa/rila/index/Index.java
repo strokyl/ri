@@ -8,6 +8,13 @@ package com.insa.rila.index;
 //import org.apache.lucene.analysis.core.WhitespaceTokenizer;
 //import org.apache.lucene.analysis.miscellaneous.WordDelimiterFilter;
 
+import com.insa.rila.db.Apparition;
+import com.insa.rila.db.ApparitionType;
+import com.insa.rila.db.Document;
+import com.insa.rila.db.Paragraphe;
+import com.insa.rila.db.Terme;
+import com.insa.rila.db.TermeParagraphe;
+import com.insa.rila.xml.ParagraphBrut;
 import java.text.Normalizer;
 
 import java.io.File;
@@ -124,8 +131,65 @@ public class Index {
      * @return a map that associate a token to the number of time it waw appearing
      * in the input list
      */
-    public static Map<String, Integer> aggregate(List<String> words) {
-        Map<String, Integer> result = new HashMap<String, Integer>();
+    public static Map<String, Integer> aggregate(List<ParagraphBrut> words) throws FileNotFoundException, IOException {
+
+        Set<Terme> termes = new HashSet();
+        Set<Paragraphe> paragraphes = new HashSet<Paragraphe>();
+        Map<Terme,TermeParagraphe> MapTermPara ;
+        Map<String,Document> documents = new HashMap<String, Document>();
+        Map<String,Apparition> MapStringApp = new HashMap<String, Apparition>();
+        int index;
+        for( ParagraphBrut p: words )
+        {
+            MapTermPara = new HashMap<Terme,TermeParagraphe>();
+            Paragraphe para = new Paragraphe();
+            p.computeToken();
+            para.setXpath(p.getXmlPath());
+            para.setSommAppTerm(0);
+
+
+
+
+               // Create or Update Document
+            Document doc = documents.get(p.getXmlUrl());
+            if(doc == null) {
+                List<Paragraphe> paraList = new LinkedList<Paragraphe>();
+                doc = new Document(p.getXmlUrl());
+                
+            }
+            doc.getParagraphes().add(para);
+            index =0;
+
+
+
+            //
+            Apparition appa ;
+            for(String token : p.getTokenParagraph() )
+            {
+                appa = MapStringApp.get(token);
+                if(appa==null)
+                {
+                    appa = new Apparition();
+                    appa.setTypeApp(ApparitionType.PARAGRAPHE);
+
+                }
+            }
+
+
+
+
+
+            
+
+            
+        }
+
+        
+        
+        
+        
+        return null;
+        /*  Map<String, Integer> result = new HashMap<String, Integer>();
 
         int value;
         for (String w : words) {
@@ -138,7 +202,9 @@ public class Index {
             result.put(w, value);
         }
 
-        return result;
+        return result;*/
+
+        
     }
 
     /**

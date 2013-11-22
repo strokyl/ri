@@ -5,6 +5,7 @@
 
 package com.insa.rila.db;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -14,10 +15,14 @@ import java.util.List;
 public class Apparition {
 
     private int id;
-    private int nombreApp;
     private List<Position> positions;
     private ApparitionType typeApp;
     private TermeParagraphe termeParagraphe;
+
+    public Apparition()
+    {
+        this.positions = new LinkedList<Position>();
+    }
 
     public int getId() {
         return id;
@@ -28,12 +33,10 @@ public class Apparition {
     }
 
     public int getNombreApp() {
-        return nombreApp;
+        return this.positions.size();
     }
 
-    public void setNombreApp(int nombreApp) {
-        this.nombreApp = nombreApp;
-    }
+
 
     public List<Position> getPositions() {
         return positions;

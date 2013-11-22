@@ -12,13 +12,15 @@ package com.insa.rila.db;
 public class Paragraphe {
 
     private int id;
+
     private final String xpath;
-    private final Document source;
+    private Document documentSource;
+
     private int sommAppTerm;
 
     public Paragraphe(String xpath, Document source) {
         this.xpath = xpath;
-        this.source = source;
+        this.documentSource = source;
         this.sommAppTerm = 0;
     }
 
@@ -41,8 +43,9 @@ public class Paragraphe {
     }
 
     public Document getSource() {
-        return source;
+        return documentSource;
     }
+
 
     public String getXpath() {
         return xpath;

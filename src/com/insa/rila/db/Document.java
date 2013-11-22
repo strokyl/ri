@@ -6,6 +6,7 @@
 package com.insa.rila.db;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -16,9 +17,17 @@ public class Document {
 
     private int id;
     private String urlXml;
-    private int sommeAppTerme;
     private Date date;
     private List<Paragraphe> paragraphes;
+
+    public Document(String urlXml) {
+
+       this.urlXml = urlXml;
+       this.paragraphes =new LinkedList<Paragraphe>();
+
+    }
+
+
 
     public Date getDate() {
         return date;
@@ -40,17 +49,14 @@ public class Document {
         return paragraphes;
     }
 
-    public void setParagraphes(List<Paragraphe> paragraphes) {
-        this.paragraphes = paragraphes;
+
+
+    public void addParagraph(Paragraphe para)
+    {
+      this.paragraphes.add(para);
+
     }
 
-    public int getSommeAppTerme() {
-        return sommeAppTerme;
-    }
-
-    public void setSommeAppTerme(int sommeAppTerme) {
-        this.sommeAppTerme = sommeAppTerme;
-    }
 
     public String getUrlXml() {
         return urlXml;
