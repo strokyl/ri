@@ -12,9 +12,19 @@ package com.insa.rila.db;
 class Position {
 
     private int id;
-    private int position;
+    private final int position;
     private Apparition app;
 
+    public Position(Apparition app, int position) {
+        this.position = position;
+        this.app = app;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    
     public Apparition getApp() {
         return app;
     }
@@ -27,17 +37,7 @@ class Position {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public int getPosition() {
         return position;
     }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
-    
-
 }
