@@ -7,7 +7,7 @@ package com.insa.rila.index;
 //import org.apache.lucene.analysis.*;
 //import org.apache.lucene.analysis.core.WhitespaceTokenizer;
 //import org.apache.lucene.analysis.miscellaneous.WordDelimiterFilter;
-import com.sun.tools.corba.se.idl.InvalidArgument;
+
 import java.text.Normalizer;
 
 import java.io.BufferedReader;
@@ -78,6 +78,8 @@ public class Index {
 
         }
         return newList;
+
+        // A faire sauver la position du mot 
 
     }
 
