@@ -25,7 +25,7 @@ public class PostGreConnection {
         this.passwd=password;
     }
 
-    public void connect()
+    public Connection connect()
     {
         Connection connection =null;
         try {
@@ -37,7 +37,7 @@ public class PostGreConnection {
                 System.out.println("Where is your PostgreSQL JDBC Driver? "
                                 + "Include in your library path!");
                 e.printStackTrace();
-                return;
+                return null;
 
         }
         try {
@@ -49,7 +49,8 @@ public class PostGreConnection {
         {
             System.out.println("Conenction granted !!");
         }
-                
+
+        return connection;
     }
 
 

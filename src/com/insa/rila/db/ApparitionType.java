@@ -5,22 +5,41 @@
 
 package com.insa.rila.db;
 
-import java.util.List;
-
 /**
  *
  * @author adrien
  */
 public enum ApparitionType
 {
-    TITRE("titre"),SOUS_TITRE("sous titre"),PARAGRAPHE("paragraphe"),DESCRIPTION("description");
+    TITRE("titre", 2.0f),SOUS_TITRE("sous titre",1.75f),PARAGRAPHE("paragraphe", 1.0f),DESCRIPTION("description", 1.5f);
 
-    private String name;
-    
-    private ApparitionType(String name)
-    {
-        this.name=name;
+    private final String name;
+    private float ponderation;
+    private int id;
 
+    private ApparitionType(String name, float ponderation) {
+        this.name = name;
+        this.ponderation = ponderation;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public float getPonderation() {
+        return ponderation;
+    }
+
+    public void setPonderation(float ponderation) {
+        this.ponderation = ponderation;
+    }
+
+    public String getName() {
+        return name;
     }
 
 }

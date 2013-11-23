@@ -50,8 +50,3 @@ CREATE TABLE ri.position (
     position Integer NOT NULL,
     apparition_id Integer references ri.apparition(apparition_id)
 );
-
-INSERT INTO ri.apparition_type(kind, ponderation) VALUES ('paragraphe',1.0);
-INSERT INTO ri.apparition_type(kind, ponderation) VALUES ('titre',2.0);
-INSERT INTO ri.apparition_type(kind, ponderation) VALUES ('description',1.5);
-INSERT INTO ri.apparition_type(kind, ponderation) VALUES ('sous titre',1.75);
