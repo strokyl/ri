@@ -5,6 +5,9 @@
 
 package com.insa.rila.db;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  *
  * @author strokyl
@@ -12,27 +15,35 @@ package com.insa.rila.db;
 public class TermeParagraphe {
     private float tf;
     private float tf_robertson;
-    private Paragraphe paragraphe;
-    private TermeParagraphe termeParagraphe;
+    private final Paragraphe paragraphe;
+    private final Terme terme;
+    private Set<Apparition> apparitions;
     private int id;
 
-    public TermeParagraphe() {
+    /**
+     * Créer un terme_paragraphe qui s'ajoute automatiquement
+     * dans le terme et le paragraphe correspondant
+     * @param paragraphe
+     * @param terme
+     */
+    public TermeParagraphe(Paragraphe paragraphe, Terme terme) {
+        this.paragraphe = paragraphe;
+        this.terme = terme;
+        this.apparitions = new HashSet<Apparition>();
+        terme.addTermeParagraphes(this);
+        paragraphe.addTermeParagraphes(this);
     }
 
     public Paragraphe getParagraphe() {
         return paragraphe;
     }
 
-    public void setParagraphe(Paragraphe paragraphe) {
-        this.paragraphe = paragraphe;
+    public void addApparition(Apparition apparition) {
+        this.apparitions.add(apparition);
     }
 
-    public TermeParagraphe getTermeParagraphe() {
-        return termeParagraphe;
-    }
-
-    public void setTermeParagraphe(TermeParagraphe termeParagraphe) {
-        this.termeParagraphe = termeParagraphe;
+    public Terme getTermeParagraphe() {
+        return terme;
     }
 
     public float getTf() {

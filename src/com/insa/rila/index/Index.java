@@ -7,11 +7,12 @@ package com.insa.rila.index;
 //import org.apache.lucene.analysis.*;
 //import org.apache.lucene.analysis.core.WhitespaceTokenizer;
 //import org.apache.lucene.analysis.miscellaneous.WordDelimiterFilter;
-
 import com.insa.rila.db.Apparition;
 import com.insa.rila.db.ApparitionType;
+import com.insa.rila.db.DbInRam;
 import com.insa.rila.db.Document;
 import com.insa.rila.db.Paragraphe;
+import com.insa.rila.db.Position;
 import com.insa.rila.db.Terme;
 import com.insa.rila.db.TermeParagraphe;
 import com.insa.rila.xml.ParagraphBrut;
@@ -20,6 +21,7 @@ import java.text.Normalizer;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -131,80 +133,81 @@ public class Index {
      * @return a map that associate a token to the number of time it waw appearing
      * in the input list
      */
-    public static Map<String, Integer> aggregate(List<ParagraphBrut> words) throws FileNotFoundException, IOException {
+    public static DbInRam createDbInRam(List<ParagraphBrut> words) throws FileNotFoundException, IOException {
+        DbInRam result = new DbInRam();
+        Map<String, Terme> mapTermes = new HashMap<String, Terme>();
+        Set<Paragraphe> setParagraphes = new HashSet<Paragraphe>();
+        Map<String, Document> mapDocuments = new HashMap<String, Document>();
+        Document doc;
+        Paragraphe paraDb;
+        Map<Terme, TermeParagraphe> mapTermPara;
 
-        Set<Terme> termes = new HashSet();
-        Set<Paragraphe> paragraphes = new HashSet<Paragraphe>();
-        Map<Terme,TermeParagraphe> MapTermPara ;
-        Map<String,Document> documents = new HashMap<String, Document>();
-        Map<String,Apparition> MapStringApp = new HashMap<String, Apparition>();
-        int index;
-        for( ParagraphBrut p: words )
-        {
-            MapTermPara = new HashMap<Terme,TermeParagraphe>();
-            Paragraphe para = new Paragraphe();
-            p.computeToken();
-            para.setXpath(p.getXmlPath());
-            para.setSommAppTerm(0);
+        for (ParagraphBrut paraBrut : words) {
+            paraBrut.computeToken();
 
-
-
-
-               // Create or Update Document
-            Document doc = documents.get(p.getXmlUrl());
-            if(doc == null) {
-                List<Paragraphe> paraList = new LinkedList<Paragraphe>();
-                doc = new Document(p.getXmlUrl());
-                
-            }
-            doc.getParagraphes().add(para);
-            index =0;
-
-
-
-            //
-            Apparition appa ;
-            for(String token : p.getTokenParagraph() )
-            {
-                appa = MapStringApp.get(token);
-                if(appa==null)
-                {
-                    appa = new Apparition();
-                    appa.setTypeApp(ApparitionType.PARAGRAPHE);
-
-                }
+            // Create or Update Document
+            doc = mapDocuments.get(paraBrut.getXmlUrl());
+            if (doc == null) {
+                doc = new Document(paraBrut.getXmlUrl());
+                result.addDocuments(doc);
+                mapDocuments.put(paraBrut.getXmlUrl(), doc);
             }
 
-
-
-
-
-            
-
-            
+            //Create Doc
+            mapTermPara = new HashMap<Terme, TermeParagraphe>();
+            paraDb = new Paragraphe(paraBrut.getXmlPath(), doc);
+            result.addParagraphe(paraDb);
+            updateSets(result, mapTermes, paraDb, mapTermPara, paraBrut.getTokenTitre(), ApparitionType.TITRE);
+            updateSets(result, mapTermes, paraDb, mapTermPara, paraBrut.getTokenParagraph(), ApparitionType.PARAGRAPHE);
+            updateSets(result, mapTermes, paraDb, mapTermPara, paraBrut.getTokenSousTitre(), ApparitionType.SOUS_TITRE);
+            updateSets(result, mapTermes, paraDb, mapTermPara, paraBrut.getTokenDescription(), ApparitionType.DESCRIPTION);
         }
 
-        
-        
-        
-        
-        return null;
-        /*  Map<String, Integer> result = new HashMap<String, Integer>();
 
-        int value;
-        for (String w : words) {
-            value = 1;
 
-            if (result.containsKey(w)) {
-                value += result.get(w);
+
+
+        return result;
+    }
+
+    private static void updateSets(DbInRam result, Map<String, Terme> mapTermes,
+            Paragraphe paraDB,Map<Terme, TermeParagraphe> mapTermPara ,List<String> tokens,
+            ApparitionType apparitionType) {
+
+        Map<String, Apparition> mapApparition = new HashMap<String, Apparition>();
+        Terme terme;
+        TermeParagraphe termeParagraphe;
+        Apparition apparition;
+        Position position;
+        int index = 0;
+        paraDB.incSommeApparitionTermes(tokens.size());
+        for (String token : tokens) {
+            terme = mapTermes.get(token);
+            if (terme == null) {
+                terme = new Terme(token);
+                result.addTermes(terme);
+                mapTermes.put(token, terme);
             }
 
-            result.put(w, value);
+            termeParagraphe = mapTermPara.get(terme);
+            if (termeParagraphe == null) {
+                termeParagraphe = new TermeParagraphe(paraDB, terme);
+                result.addTermeParagraphes(termeParagraphe);
+                mapTermPara.put(terme, termeParagraphe);
+            }
+
+            apparition = mapApparition.get(token);
+            if (apparition == null) {
+                apparition = new Apparition(termeParagraphe, apparitionType);
+                result.addApparition(apparition);
+                mapApparition.put(token, apparition);
+            }
+
+            position = new Position(apparition, index);
+            result.addPosition(position);
+
+            index++;
         }
-
-        return result;*/
-
-        
     }
 
     /**
@@ -243,14 +246,16 @@ public class Index {
             currentMap = maps[i];
 
             for (String token : currentMap.keySet()) {
-                value = currentMap.get(token).floatValue()*currentCoeff;
+                value = currentMap.get(token).floatValue() * currentCoeff;
                 if (result.containsKey(token)) {
                     value += result.get(token);
                 }
+
                 result.put(token, value);
             }
+
         }
-        
+
         return result;
     }
 }

@@ -16,6 +16,7 @@ public enum ApparitionType
     TITRE("titre"),SOUS_TITRE("sous titre"),PARAGRAPHE("paragraphe"),DESCRIPTION("description");
 
     private String name;
+    
     private ApparitionType(String name)
     {
         this.name=name;

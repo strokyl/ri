@@ -9,15 +9,22 @@ package com.insa.rila.db;
  *
  * @author adrien
  */
-class Position {
+public class Position {
 
     private int id;
     private final int position;
-    private Apparition app;
+    private final Apparition app;
 
+    /**
+     * Créé une position est s'enregistre automatiquement dans le paragraphe
+     * corespondant
+     * @param app
+     * @param position
+     */
     public Position(Apparition app, int position) {
         this.position = position;
         this.app = app;
+        this.app.addPositions(this);
     }
 
     public void setId(int id) {
@@ -27,10 +34,6 @@ class Position {
     
     public Apparition getApp() {
         return app;
-    }
-
-    public void setApp(Apparition app) {
-        this.app = app;
     }
 
     public int getId() {

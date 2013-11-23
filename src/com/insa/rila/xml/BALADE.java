@@ -117,7 +117,7 @@ public class BALADE {
         StringBuilder builder;
 
         //ces variables correspondent au info à mettre dans les paragraphes
-        String textParagraph;
+        String textParagraph = "";
         String textTitre = this.getPRESENTATION().getTITRE();
         String textSousTitre;
         String textDescription = "";
@@ -174,6 +174,9 @@ public class BALADE {
             } else if (o instanceof SEC) {
                 s = (SEC) o;
                 textSousTitre = s.getSOUSTITRE();
+                if(textSousTitre == null) {
+                    textSousTitre = "";
+                }
                 xpathIndexSP = 1;
 
                 for (Object o_ : s.getPOrPHOTO()) {

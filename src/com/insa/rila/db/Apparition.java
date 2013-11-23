@@ -2,11 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.insa.rila.db;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -15,13 +14,15 @@ import java.util.List;
 public class Apparition {
 
     private int id;
-    private List<Position> positions;
-    private ApparitionType typeApp;
-    private TermeParagraphe termeParagraphe;
+    private Set<Position> positions;
+    private final ApparitionType apparitionType;
+    private final TermeParagraphe termeParagraphe;
 
-    public Apparition()
-    {
-        this.positions = new LinkedList<Position>();
+    public Apparition(TermeParagraphe termeParagraphe, ApparitionType apparitionType) {
+        this.termeParagraphe = termeParagraphe;
+        this.positions = new HashSet<Position>();
+        this. apparitionType = apparitionType;
+        termeParagraphe.addApparition(this);
     }
 
     public int getId() {
@@ -36,32 +37,19 @@ public class Apparition {
         return this.positions.size();
     }
 
-
-
-    public List<Position> getPositions() {
+    public Set<Position> getPositions() {
         return positions;
     }
 
-    public void setPositions(List<Position> positions) {
-        this.positions = positions;
+    public void addPositions(Position position) {
+        this.positions.add(position);
     }
 
     public TermeParagraphe getTermeParagraphe() {
         return termeParagraphe;
     }
 
-    public void setTermeParagraphe(TermeParagraphe termeParagraphe) {
-        this.termeParagraphe = termeParagraphe;
+    public ApparitionType getApparitionType() {
+        return  apparitionType;
     }
-
-    public ApparitionType getTypeApp() {
-        return typeApp;
-    }
-
-    public void setTypeApp(ApparitionType typeApp) {
-        this.typeApp = typeApp;
-    }
-    
-    
-
 }

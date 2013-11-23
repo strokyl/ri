@@ -114,27 +114,6 @@ public class IndexTest {
     /**
      * Test of aggregate method, of class Index.
      */
-    @Test
-    public void testAggregate() {
-        System.out.println("aggregate");
-        List<String> words = new LinkedList<String>();
-        words.add("salut");
-        words.add("salu");
-        words.add("salut");
-        words.add("Pierre");
-        words.add("salut");
-        words.add("Alice");
-        words.add("salut");
-        words.add("Pierre");
-
-        Map<String, Integer> expResult = new HashMap<String, Integer>();
-        expResult.put("salut", 4);
-        expResult.put("salu", 1);
-        expResult.put("Pierre", 2);
-        expResult.put("Alice", 1);
-        Map<String, Integer> result = Index.aggregate(words);
-        assertEquals(expResult, result);
-    }
 
     /**
      * Test of getTokenOccurenceOfString method, of class Index.

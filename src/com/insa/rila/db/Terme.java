@@ -5,8 +5,8 @@
 
 package com.insa.rila.db;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -17,14 +17,18 @@ public class Terme {
     private float ipf;
     private int id;
 
-    private List<TermeParagraphe> termeParagraphes;
+    public String getRacine() {
+        return racine;
+    }
+
+    private Set<TermeParagraphe> termeParagraphes;
 
     public Terme(String racine) {
         this.racine = racine;
-        this.termeParagraphes = new LinkedList<TermeParagraphe>();
+        this.termeParagraphes = new HashSet<TermeParagraphe>();
     }
 
-    public List<TermeParagraphe> getTermeParagraphes() {
+    public Set<TermeParagraphe> getTermeParagraphes() {
         return termeParagraphes;
     }
 

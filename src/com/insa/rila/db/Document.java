@@ -6,8 +6,8 @@
 package com.insa.rila.db;
 
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -16,14 +16,14 @@ import java.util.List;
 public class Document {
 
     private int id;
-    private String urlXml;
+    private final String urlXml;
     private Date date;
-    private List<Paragraphe> paragraphes;
+    private Set<Paragraphe> paragraphes;
 
     public Document(String urlXml) {
 
        this.urlXml = urlXml;
-       this.paragraphes =new LinkedList<Paragraphe>();
+       this.paragraphes =new HashSet<Paragraphe>();
 
     }
 
@@ -45,7 +45,7 @@ public class Document {
         this.id = id;
     }
 
-    public List<Paragraphe> getParagraphes() {
+    public Set<Paragraphe> getParagraphes() {
         return paragraphes;
     }
 
@@ -61,11 +61,4 @@ public class Document {
     public String getUrlXml() {
         return urlXml;
     }
-
-    public void setUrlXml(String urlXml) {
-        this.urlXml = urlXml;
-    }
-
-    
-
 }
