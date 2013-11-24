@@ -74,8 +74,8 @@ public class DbInRam {
         saveTerme(c);
         saveParagraphe(c);
         saveTermeParagraphe(c);
-        //saveApparition(c);
-        //savePosition(c);
+        saveApparition(c);
+        savePosition(c);
     }
 
     private void saveDocument(Connection c) throws SQLException {
@@ -116,14 +116,14 @@ public class DbInRam {
     }
 
     private void saveParagraphe(Connection c) throws SQLException {
-                int id = 0;
+        int id = 0;
 
         PreparedStatement ps = c.prepareStatement("INSERT INTO ri.paragraphe VALUES (?, ?, ?, ?)");
         for (Paragraphe par : paragraphes) {
             ps.setInt(1, id);
             par.setId(id);
-            ps.setString(2,  par.getXpath());
-            ps.setInt(3,  par.getSommAppTerm());
+            ps.setString(2, par.getXpath());
+            ps.setInt(3, par.getSommAppTerm());
             ps.setInt(4, par.getDocumentSource().getId());
             ps.addBatch();
             id++;
@@ -153,12 +153,39 @@ public class DbInRam {
         System.out.println(java.util.Arrays.asList(results));
     }
 
-    private void saveApparition(Connection c) {
-        throw new UnsupportedOperationException("Not yet implemented");
+    private void saveApparition(Connection c) throws SQLException {
+        int id = 0;
+        PreparedStatement ps = c.prepareStatement("INSERT INTO ri.apparition VALUES (?, ?, ?, ?)");
+        for (Apparition apparition : apparitions) {
+            ps.setInt(1, id);
+            apparition.setId(id);
+            ps.setInt(2, apparition.getNombreApp());
+            ps.setInt(3, apparition.getTermeParagraphe().getId());
+            ps.setInt(4, apparition.getApparitionType().getId());
+            ps.addBatch();
+            id++;
+        }
+
+        ps.clearParameters();
+        int[] results = ps.executeBatch();
+        System.out.println(java.util.Arrays.asList(results));
     }
 
-    private void savePosition(Connection c) {
-        throw new UnsupportedOperationException("Not yet implemented");
+    private void savePosition(Connection c) throws SQLException {
+        int id = 0;
+        PreparedStatement ps = c.prepareStatement("INSERT INTO ri.position VALUES (?, ?, ?)");
+        for (Position position : positions) {
+            ps.setInt(1, id);
+            position.setId(id);
+            ps.setInt(2, position.getPosition());
+            ps.setInt(3, position.getApp().getId());
+            ps.addBatch();
+            id++;
+        }
+
+        ps.clearParameters();
+        int[] results = ps.executeBatch();
+        System.out.println(java.util.Arrays.asList(results));
     }
 
     private void saveApparitionType(Connection c) throws SQLException {
