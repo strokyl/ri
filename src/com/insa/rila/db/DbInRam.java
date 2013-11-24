@@ -2,11 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.insa.rila.db;
 
 import com.sun.tools.javadoc.resources.javadoc;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.HashSet;
@@ -17,6 +17,7 @@ import java.util.Set;
  * @author strokyl
  */
 public class DbInRam {
+
     private Set<Terme> termes;
     private Set<Document> documents;
     private Set<Paragraphe> paragraphes;
@@ -69,20 +70,49 @@ public class DbInRam {
     public void saveToDb() throws SQLException {
         Connection c = PostGreFactory.getConnect();
         saveApparitionType(c);
-        //saveDocument(c);
-        //saveTerme(c);
+        saveDocument(c);
+        saveTerme(c);
         //saveParagraphe(c);
         //saveTermeParagraphe(c);
         //saveApparition(c);
         //savePosition(c);
     }
 
-    private void saveDocument(Connection c) {
-        throw new UnsupportedOperationException("Not yet implemented");
+    private void saveDocument(Connection c) throws SQLException {
+        int id = 0;
+
+        //TODO: ajaouter date
+        PreparedStatement ps = c.prepareStatement("INSERT INTO ri.document VALUES (?, ?, ?, NULL)");
+        for (Document doc : documents) {
+            ps.setInt(1, id);
+            doc.setId(id);
+            ps.setString(2, doc.getUrlXml());
+            ps.setInt(3, doc.getSommeApparitionTermes());
+            ps.addBatch();
+            id++;
+        }
+
+        ps.clearParameters();
+        int[] results = ps.executeBatch();
+        System.out.println(java.util.Arrays.asList(results));
+
     }
 
-    private void saveTerme(Connection c) {
-        throw new UnsupportedOperationException("Not yet implemented");
+    private void saveTerme(Connection c) throws SQLException {
+        int id = 0;
+        PreparedStatement ps = c.prepareStatement("INSERT INTO ri.terme VALUES (?, ?, ?)");
+        for (Terme terme : termes) {
+            ps.setInt(1, id);
+            terme.setId(id);
+            ps.setString(2, terme.getRacine());
+            ps.setFloat(3, terme.getIpf());
+            ps.addBatch();
+            id++;
+        }
+
+        ps.clearParameters();
+        int[] results = ps.executeBatch();
+        System.out.println(java.util.Arrays.asList(results));
     }
 
     private void saveParagraphe(Connection c) {
@@ -104,7 +134,7 @@ public class DbInRam {
     private void saveApparitionType(Connection c) throws SQLException {
         int id = 0;
         PreparedStatement ps = c.prepareStatement("INSERT INTO ri.apparition_type VALUES (?, ?, ?)");
-        for(ApparitionType at : ApparitionType.values()) {
+        for (ApparitionType at : ApparitionType.values()) {
             ps.setInt(1, id);
             at.setId(id);
             ps.setString(2, at.getName());
@@ -112,7 +142,10 @@ public class DbInRam {
 
             ps.addBatch();
             id++;
+
         }
+
+
 
         ps.clearParameters();
         int[] results = ps.executeBatch();

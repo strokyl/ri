@@ -17,6 +17,8 @@ public class Document {
 
     private int id;
     private final String urlXml;
+    private int sommeApparitionTermes;
+
     private Date date;
     private Set<Paragraphe> paragraphes;
 
@@ -28,9 +30,17 @@ public class Document {
     }
 
 
-
     public Date getDate() {
         return date;
+    }
+
+
+    public int getSommeApparitionTermes() {
+        return sommeApparitionTermes;
+    }
+
+    public void setSommeApparitionTermes(int sommeApparitionTermes) {
+        this.sommeApparitionTermes = sommeApparitionTermes;
     }
 
     public void setDate(Date date) {
