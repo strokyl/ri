@@ -72,8 +72,8 @@ public class DbInRam {
         saveApparitionType(c);
         saveDocument(c);
         saveTerme(c);
-        //saveParagraphe(c);
-        //saveTermeParagraphe(c);
+        saveParagraphe(c);
+        saveTermeParagraphe(c);
         //saveApparition(c);
         //savePosition(c);
     }
@@ -115,12 +115,42 @@ public class DbInRam {
         System.out.println(java.util.Arrays.asList(results));
     }
 
-    private void saveParagraphe(Connection c) {
-        throw new UnsupportedOperationException("Not yet implemented");
+    private void saveParagraphe(Connection c) throws SQLException {
+                int id = 0;
+
+        PreparedStatement ps = c.prepareStatement("INSERT INTO ri.paragraphe VALUES (?, ?, ?, ?)");
+        for (Paragraphe par : paragraphes) {
+            ps.setInt(1, id);
+            par.setId(id);
+            ps.setString(2,  par.getXpath());
+            ps.setInt(3,  par.getSommAppTerm());
+            ps.setInt(4, par.getDocumentSource().getId());
+            ps.addBatch();
+            id++;
+        }
+
+        ps.clearParameters();
+        int[] results = ps.executeBatch();
+        System.out.println(java.util.Arrays.asList(results));
     }
 
-    private void saveTermeParagraphe(Connection c) {
-        throw new UnsupportedOperationException("Not yet implemented");
+    private void saveTermeParagraphe(Connection c) throws SQLException {
+        int id = 0;
+        PreparedStatement ps = c.prepareStatement("INSERT INTO ri.terme_paragraphe VALUES (?, ?, ?, ?, ?)");
+        for (TermeParagraphe termePara : termeParagraphes) {
+            ps.setInt(1, id);
+            termePara.setId(id);
+            ps.setFloat(2, termePara.getTf());
+            ps.setFloat(3, termePara.getTf_robertson());
+            ps.setInt(4, termePara.getTerme().getId());
+            ps.setInt(5, termePara.getParagraphe().getId());
+            ps.addBatch();
+            id++;
+        }
+
+        ps.clearParameters();
+        int[] results = ps.executeBatch();
+        System.out.println(java.util.Arrays.asList(results));
     }
 
     private void saveApparition(Connection c) {

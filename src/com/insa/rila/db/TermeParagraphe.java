@@ -42,7 +42,7 @@ public class TermeParagraphe {
         this.apparitions.add(apparition);
     }
 
-    public Terme getTermeParagraphe() {
+    public Terme getTerme() {
         return terme;
     }
 
