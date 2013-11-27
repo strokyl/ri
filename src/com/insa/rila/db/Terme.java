@@ -52,5 +52,10 @@ public class Terme {
         this.ipf = ipf;
     }
 
+    public boolean equals(Terme terme)
+    {
+        return this.racine.equalsIgnoreCase(terme.racine);
+    }
+
     
 }

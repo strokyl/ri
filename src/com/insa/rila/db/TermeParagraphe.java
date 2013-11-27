@@ -17,7 +17,7 @@ public class TermeParagraphe {
     private float tf_robertson;
     private final Paragraphe paragraphe;
     private final Terme terme;
-    private Set<Apparition> apparitions;
+    private final Set<Apparition> apparitions;
     private int id;
 
     /**
@@ -40,6 +40,11 @@ public class TermeParagraphe {
 
     public void addApparition(Apparition apparition) {
         this.apparitions.add(apparition);
+    }
+
+    public Set<Apparition> getApparition()
+    {
+        return this.apparitions;
     }
 
     public Terme getTerme() {
@@ -68,5 +73,12 @@ public class TermeParagraphe {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+
+    public boolean isTermeCorres(Terme ter)
+    {
+       
+       return ter.getId()== this.terme.getId();
     }
 }
