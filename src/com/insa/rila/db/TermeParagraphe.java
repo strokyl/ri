@@ -27,6 +27,7 @@ public class TermeParagraphe {
      * @param terme
      */
     public TermeParagraphe(Paragraphe paragraphe, Terme terme) {
+        this.tf=0f;
         this.paragraphe = paragraphe;
         this.terme = terme;
         this.apparitions = new HashSet<Apparition>();
@@ -80,5 +81,9 @@ public class TermeParagraphe {
     {
        
        return ter.getId()== this.terme.getId();
+    }
+
+    public void incTf() {
+        this.tf++;
     }
 }

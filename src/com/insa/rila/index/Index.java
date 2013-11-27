@@ -204,6 +204,7 @@ public class Index {
             }
 
             position = new Position(apparition, index);
+            termeParagraphe.incTf();
             result.addPosition(position);
 
             index++;
