@@ -7,8 +7,11 @@ package com.insa.rila.main;
 
 import com.insa.rila.index.Index;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 
 
@@ -24,14 +27,17 @@ public class Main {
 
     public static void main(String[] args) {
         String content = "bonjour! tu vas bien? oui et toi! ca va, mais je verrais bien. Ok";
-        
-        List<String> list = new LinkedList<String>();
-        List<String> stemm = new LinkedList<String>();
-        list = Index.getToken(content);
-        stemm=Index.stemming(list);
-        for(int i=0;i<stemm.size();i++)
+        Set<String> test = new HashSet<String>();
+        Iterator it ;
+        test.add("1");
+        test.add("2");
+        test.add("3");
+        test.add("4");
+        test.add("5");
+        it=test.iterator();
+        while(it.hasNext())
         {
-            System.out.println(stemm.get(i));
+            System.out.println("test : "+it.next());
         }
 
     }

@@ -42,6 +42,11 @@ public class TermeParagraphe {
         this.apparitions.add(apparition);
     }
 
+    public Set<Apparition> getApparition()
+    {
+        return this.apparitions;
+    }
+
     public Terme getTerme() {
         return terme;
     }
@@ -68,5 +73,13 @@ public class TermeParagraphe {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+
+    public boolean isTermeCorres(Terme ter)
+    {
+       
+       return ter.getId()== this.terme.getId();
+
     }
 }

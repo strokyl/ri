@@ -4,12 +4,13 @@
  */
 package com.insa.rila.db;
 
-import com.sun.tools.javadoc.resources.javadoc;
+
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -102,6 +103,7 @@ public class DbInRam {
         int id = 0;
         PreparedStatement ps = c.prepareStatement("INSERT INTO ri.terme VALUES (?, ?, ?)");
         for (Terme terme : termes) {
+            CalcIdf(terme);
             ps.setInt(1, id);
             terme.setId(id);
             ps.setString(2, terme.getRacine());
@@ -138,6 +140,7 @@ public class DbInRam {
         int id = 0;
         PreparedStatement ps = c.prepareStatement("INSERT INTO ri.terme_paragraphe VALUES (?, ?, ?, ?, ?)");
         for (TermeParagraphe termePara : termeParagraphes) {
+            calcTfIdf(termePara);
             ps.setInt(1, id);
             termePara.setId(id);
             ps.setFloat(2, termePara.getTf());
@@ -208,4 +211,49 @@ public class DbInRam {
         int[] results = ps.executeBatch();
         System.out.println(java.util.Arrays.asList(results));
     }
+
+    private void CalcIdf(Terme ter)
+    {
+        int nbTotalDoc = documents.size();
+        int nbDocApp =0;
+        Terme terme;
+        int i=0;
+        boolean apparait =false;
+        Iterator iteTermePara;
+        Iterator itParaDoc;
+        Paragraphe paraDoc;
+
+        for(Document doc :documents)
+        {
+            itParaDoc = doc.getParagraphes().iterator();
+            while(itParaDoc.hasNext() && apparait == false)
+            {
+                Paragraphe para = (Paragraphe) itParaDoc.next();
+                iteTermePara = para.getTermeParagraphes().iterator();
+                while(apparait ==false && iteTermePara.hasNext() )
+                {
+                    TermeParagraphe tempo = (TermeParagraphe) iteTermePara.next();
+                    
+                    if(tempo.getTerme().equals(ter)) // verif equals si mieux sur la racine ou sur l'ID
+                    {
+                        apparait=true;
+                        nbDocApp++;
+                    }
+
+                }
+
+            }
+
+        }
+
+        ter.setIpf((float) Math.log(nbTotalDoc/nbDocApp));
+
+    }
+
+    private void calcTfIdf(TermeParagraphe termePara) {
+        termePara.setTf_robertson(termePara.getTerme().getIpf()*termePara.getTf());
+    }
+
+
+
 }
