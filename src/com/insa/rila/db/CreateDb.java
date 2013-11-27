@@ -23,7 +23,7 @@ public class CreateDb {
     public static void createDb() throws JAXBException, FileNotFoundException, IOException, SQLException {
         //List<ParagraphBrut> paragraphBruts = Parser.parseDirectoryToParagraph("Collection/");
 
-        List<ParagraphBrut> paragraphBruts = Parser.parseDirectoryToParagraph("Collection2/");
+        List<ParagraphBrut> paragraphBruts = Parser.parseDirectoryToParagraph("Collection/");
         System.out.println("____");
         DbInRam dbInRam = Index.createDbInRam(paragraphBruts);
         dbInRam.printStatistique();

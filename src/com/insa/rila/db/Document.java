@@ -20,7 +20,7 @@ public class Document {
     private int sommeApparitionTermes;
 
     private Date date;
-    private Set<Paragraphe> paragraphes;
+    private final Set<Paragraphe> paragraphes;
 
     public Document(String urlXml) {
 

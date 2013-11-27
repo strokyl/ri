@@ -4,9 +4,7 @@
  */
 package com.insa.rila.db;
 
-import com.sun.tools.javadoc.resources.javadoc;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.HashSet;
@@ -18,12 +16,13 @@ import java.util.Set;
  */
 public class DbInRam {
 
-    private Set<Terme> termes;
-    private Set<Document> documents;
-    private Set<Paragraphe> paragraphes;
-    private Set<TermeParagraphe> termeParagraphes;
-    private Set<Position> positions;
-    private Set<Apparition> apparitions;
+    private final Set<Terme> termes;
+    private final Set<Document> documents;
+    private final Set<Paragraphe> paragraphes;
+    private final Set<TermeParagraphe> termeParagraphes;
+    private final Set<Position> positions;
+    private final Set<Apparition> apparitions;
+    public static final int NUM_INSERT_IN_ROW = 10000;
 
     public DbInRam() {
         termes = new HashSet<Terme>();
@@ -90,11 +89,16 @@ public class DbInRam {
             ps.setInt(3, doc.getSommeApparitionTermes());
             ps.addBatch();
             id++;
+            if (id % NUM_INSERT_IN_ROW == 0) {
+                ps.clearParameters();
+                ps.executeBatch();
+                ps.clearBatch();
+            }
         }
 
         ps.clearParameters();
-        int[] results = ps.executeBatch();
-        System.out.println(java.util.Arrays.asList(results));
+        ps.executeBatch();
+        System.out.println("documents mis en table");
 
     }
 
@@ -108,11 +112,16 @@ public class DbInRam {
             ps.setFloat(3, terme.getIpf());
             ps.addBatch();
             id++;
+            if (id % NUM_INSERT_IN_ROW == 0) {
+                ps.clearParameters();
+                ps.executeBatch();
+                ps.clearBatch();
+            }
         }
 
         ps.clearParameters();
         int[] results = ps.executeBatch();
-        System.out.println(java.util.Arrays.asList(results));
+        System.out.println("termes mis en tables");
     }
 
     private void saveParagraphe(Connection c) throws SQLException {
@@ -127,11 +136,16 @@ public class DbInRam {
             ps.setInt(4, par.getDocumentSource().getId());
             ps.addBatch();
             id++;
+            if (id % NUM_INSERT_IN_ROW == 0) {
+                ps.clearParameters();
+                ps.executeBatch();
+                ps.clearBatch();
+            }
         }
 
         ps.clearParameters();
         int[] results = ps.executeBatch();
-        System.out.println(java.util.Arrays.asList(results));
+        System.out.println("paragraphes mis en table");
     }
 
     private void saveTermeParagraphe(Connection c) throws SQLException {
@@ -146,11 +160,16 @@ public class DbInRam {
             ps.setInt(5, termePara.getParagraphe().getId());
             ps.addBatch();
             id++;
+            if (id % NUM_INSERT_IN_ROW == 0) {
+                ps.clearParameters();
+                ps.executeBatch();
+                ps.clearBatch();
+            }
         }
 
         ps.clearParameters();
-        int[] results = ps.executeBatch();
-        System.out.println(java.util.Arrays.asList(results));
+        ps.executeBatch();
+        System.out.println("terme_paragraphes mis en table");
     }
 
     private void saveApparition(Connection c) throws SQLException {
@@ -164,11 +183,16 @@ public class DbInRam {
             ps.setInt(4, apparition.getApparitionType().getId());
             ps.addBatch();
             id++;
+            if (id % NUM_INSERT_IN_ROW == 0) {
+                ps.clearParameters();
+                ps.executeBatch();
+                ps.clearBatch();
+            }
         }
 
         ps.clearParameters();
-        int[] results = ps.executeBatch();
-        System.out.println(java.util.Arrays.asList(results));
+        ps.executeBatch();
+        System.out.println("apparitions mis en table");
     }
 
     private void savePosition(Connection c) throws SQLException {
@@ -181,11 +205,16 @@ public class DbInRam {
             ps.setInt(3, position.getApp().getId());
             ps.addBatch();
             id++;
+            if (id % NUM_INSERT_IN_ROW == 0) {
+                ps.clearParameters();
+                ps.executeBatch();
+                ps.clearBatch();
+            }
         }
 
         ps.clearParameters();
-        int[] results = ps.executeBatch();
-        System.out.println(java.util.Arrays.asList(results));
+        ps.executeBatch();
+        System.out.println("positions mis en table");
     }
 
     private void saveApparitionType(Connection c) throws SQLException {
@@ -199,13 +228,17 @@ public class DbInRam {
 
             ps.addBatch();
             id++;
-
+            if (id % NUM_INSERT_IN_ROW == 0) {
+                ps.clearParameters();
+                ps.executeBatch();
+                ps.clearBatch();
+            }
         }
 
 
 
         ps.clearParameters();
-        int[] results = ps.executeBatch();
-        System.out.println(java.util.Arrays.asList(results));
+        ps.executeBatch();
+        System.out.println("apapritionTypes mis en table");
     }
 }
