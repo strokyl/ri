@@ -11,7 +11,7 @@ package com.insa.rila.db;
  */
 public enum ApparitionType
 {
-    TITRE("titre", 2.0f),SOUS_TITRE("sous titre",1.75f),PARAGRAPHE("paragraphe", 1.0f),DESCRIPTION("description", 1.5f);
+    TITRE("titre", 3.0f),SOUS_TITRE("sous titre",2.5f),PARAGRAPHE("paragraphe", 4.0f),DESCRIPTION("description", 1.5f);
 
     private final String name;
     private float ponderation;
