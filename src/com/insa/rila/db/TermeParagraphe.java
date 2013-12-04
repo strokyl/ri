@@ -97,6 +97,4 @@ public class TermeParagraphe {
     public void incTf(float ponderation) {
         this.tf+=ponderation;
     }
-
-
 }

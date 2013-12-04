@@ -150,6 +150,7 @@ public class DbInRam {
 				ps.clearBatch();
 			}
 		}
+
 		ps.clearParameters();
 		int[] results = ps.executeBatch();
 		System.out.println("paragraphes mis en table");
@@ -163,6 +164,7 @@ public class DbInRam {
                 calcTfRobert();
 		PreparedStatement ps = c.prepareStatement("INSERT INTO ri.terme_paragraphe VALUES (?, ?, ?, ?, ?)");
 		for (TermeParagraphe termePara : termeParagraphes) {
+			
 			ps.setInt(1, id);
 			termePara.setId(id);
 			ps.setFloat(2, termePara.getTf());
