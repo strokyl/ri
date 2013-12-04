@@ -10,7 +10,6 @@ import com.insa.rila.xml.Parser;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.JAXBException;
 
