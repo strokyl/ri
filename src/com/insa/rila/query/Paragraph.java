@@ -61,6 +61,32 @@ public class Paragraph {
 		return "Paragraph{" + "xpath=" + xpath + ", xmlUrl=" + xmlUrl + ", pertinance=" + pertinance + '}';
 	}
 
+	@Override
+	public int hashCode() {
+		int hash = 7;
+		hash = 71 * hash + (this.xpath != null ? this.xpath.hashCode() : 0);
+		hash = 71 * hash + (this.xmlUrl != null ? this.xmlUrl.hashCode() : 0);
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final Paragraph other = (Paragraph) obj;
+		if ((this.xpath == null) ? (other.xpath != null) : !this.xpath.equals(other.xpath)) {
+			return false;
+		}
+		if ((this.xmlUrl == null) ? (other.xmlUrl != null) : !this.xmlUrl.equals(other.xmlUrl)) {
+			return false;
+		}
+		return true;
+	}
+
 
 	
 

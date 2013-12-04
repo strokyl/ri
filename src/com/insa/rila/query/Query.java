@@ -7,6 +7,8 @@ package com.insa.rila.query;
 
 import com.insa.rila.db.PostGreFactory;
 import com.insa.rila.index.Index;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,8 +18,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
 
 /**
  *
@@ -27,13 +32,40 @@ public class Query {
 
 	private final List<String> termes;
 	private final int id;
+	private final static String EXPECTED_REP_URL = "qrels/qrel%02d.txt";
+
+	private Set<Paragraph> expectedParagraph;
+	private List<Paragraph> result;
 
 	public Query(int id, String query) throws IOException {
 		this.termes = Index.getTokenList(query);
 		this.id = id;
 	}
 
-	public List<Paragraph> getAllDocument() throws SQLException {
+	public Set<Paragraph> getExpectedParagraph() {
+		return expectedParagraph;
+	}
+
+	public void parseExpectedParagraph() throws FileNotFoundException {
+		Scanner scanner = new Scanner(new File(String.format(EXPECTED_REP_URL, this.id)));
+		String[] line;
+		String fileUrl;
+		String xpath;
+		boolean pertinant;
+		expectedParagraph = new HashSet<Paragraph>();
+		while(scanner.hasNext()) {
+			line = scanner.nextLine().split("\\s+");
+			fileUrl = line[0];
+			xpath = line[1];
+			pertinant = Integer.parseInt(line[2]) == 1;
+
+			if(pertinant) {
+				expectedParagraph.add(new Paragraph(xpath, fileUrl, this));
+			}
+		}
+	}
+
+	public List<Paragraph> searchParagraph() throws SQLException {
 		List<Paragraph> paragraphsTrie;
 		Map<Integer, Paragraph> paragraphs = new HashMap<Integer, Paragraph>();
 		Connection connection = PostGreFactory.getConnect();
@@ -89,10 +121,7 @@ public class Query {
 
 		});
 
-		for(Paragraph p : paragraphsTrie) {
-			System.out.println(p);
-		}
-
+		this.result = paragraphsTrie;
 		return paragraphsTrie;
 	}
 
@@ -112,4 +141,19 @@ public class Query {
 		return result;
 	}
 
+	public int avoirPrecission(int N) {
+		int tot = 0;
+
+		for(int i= 0; i < N ;i++) {
+			if(expectedParagraph.contains(result.get(i))){
+				tot++;
+			}	
+		}
+
+		return tot;
+	}
+
+	public int getId() {
+		return id;
+	}
 }
