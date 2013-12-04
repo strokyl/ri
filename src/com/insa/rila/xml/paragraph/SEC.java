@@ -6,7 +6,7 @@
 //
 
 
-package com.insa.rila.xml;
+package com.insa.rila.xml.paragraph;
 
 import java.util.ArrayList;
 import java.util.List;

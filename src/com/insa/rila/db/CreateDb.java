@@ -5,8 +5,8 @@
 package com.insa.rila.db;
 
 import com.insa.rila.index.Index;
-import com.insa.rila.xml.ParagraphBrut;
-import com.insa.rila.xml.Parser;
+import com.insa.rila.xml.paragraph.ParagraphBrut;
+import com.insa.rila.xml.paragraph.Parser;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;

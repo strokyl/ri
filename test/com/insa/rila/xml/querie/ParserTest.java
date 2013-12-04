@@ -4,8 +4,9 @@
  * and open the template in the editor.
  */
 
-package com.insa.rila.query;
+package com.insa.rila.xml.querie;
 
+import com.insa.rila.query.Query;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -18,9 +19,9 @@ import static org.junit.Assert.*;
  *
  * @author strokyl
  */
-public class QueryTest {
+public class ParserTest {
 	
-	public QueryTest() {
+	public ParserTest() {
 	}
 	
 	@BeforeClass
@@ -40,14 +41,13 @@ public class QueryTest {
 	}
 
 	/**
-	 * Test of getAllDocument method, of class Query.
+	 * Test of getAllQuery method, of class Parser.
 	 */
 	@Test
-	public void testGetAllDocument() throws Exception {
-		System.out.println("getAllDocument");
-		Query instance =new Query(0,"balade au Mont Blanc");
-		instance.getAllDocument();
-		// TODO review the generated test code and remove the default call to fail.
+	public void testGetAllQuery() throws Exception {
+		System.out.println("getAllQuery");
+		List<Query> result = Parser.getAllQuery();
+		assertEquals(result.size(), 11);
 	}
-
+	
 }

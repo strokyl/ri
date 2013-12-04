@@ -6,13 +6,14 @@
 //
 
 
-package com.insa.rila.xml;
+package com.insa.rila.xml.paragraph;
 
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -22,41 +23,47 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "p"
+    "secOrPOrPHOTO"
 })
-@XmlRootElement(name = "DESCRIPTION")
-public class DESCRIPTION {
+@XmlRootElement(name = "RECIT")
+public class RECIT {
 
-    @XmlElement(name = "P", required = true)
-    protected List<P> p;
+    @XmlElements({
+        @XmlElement(name = "SEC", type = SEC.class),
+        @XmlElement(name = "P", type = P.class),
+        @XmlElement(name = "PHOTO", type = PHOTO.class)
+    })
+    protected List<Object> secOrPOrPHOTO;
 
     /**
-     * Gets the value of the p property.
+     * Gets the value of the secOrPOrPHOTO property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the p property.
+     * This is why there is not a <CODE>set</CODE> method for the secOrPOrPHOTO property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getP().add(newItem);
+     *    getSECOrPOrPHOTO().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
+     * {@link SEC }
      * {@link P }
+     * {@link PHOTO }
      * 
      * 
      */
-    public List<P> getP() {
-        if (p == null) {
-            p = new ArrayList<P>();
+    public List<Object> getSECOrPOrPHOTO() {
+        if (secOrPOrPHOTO == null) {
+            secOrPOrPHOTO = new ArrayList<Object>();
         }
-        return this.p;
+        return this.secOrPOrPHOTO;
     }
 
 }

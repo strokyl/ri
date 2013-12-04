@@ -15,7 +15,7 @@ import com.insa.rila.db.Paragraphe;
 import com.insa.rila.db.Position;
 import com.insa.rila.db.Terme;
 import com.insa.rila.db.TermeParagraphe;
-import com.insa.rila.xml.ParagraphBrut;
+import com.insa.rila.xml.paragraph.ParagraphBrut;
 import java.text.Normalizer;
 
 import java.io.File;

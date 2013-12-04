@@ -26,9 +26,11 @@ import java.util.Map;
 public class Query {
 
 	private final List<String> termes;
+	private final int id;
 
-	public Query(String query) throws IOException {
+	public Query(int id, String query) throws IOException {
 		this.termes = Index.getTokenList(query);
+		this.id = id;
 	}
 
 	public List<Paragraph> getAllDocument() throws SQLException {

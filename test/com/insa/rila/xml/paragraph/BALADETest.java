@@ -2,8 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.insa.rila.xml;
+package com.insa.rila.xml.paragraph;
 
+import com.insa.rila.xml.paragraph.Parser;
+import com.insa.rila.xml.paragraph.BALADE;
+import com.insa.rila.xml.paragraph.ParagraphBrut;
 import java.io.File;
 import java.util.List;
 import javax.xml.bind.JAXBException;

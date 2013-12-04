@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.insa.rila.xml;
+package com.insa.rila.xml.paragraph;
 
 import java.io.File;
 import java.util.HashMap;
@@ -26,7 +26,7 @@ public class Parser {
      * @throws JAXBException
      */
     public static BALADE parseFile(File file) throws JAXBException {
-        JAXBContext jc = JAXBContext.newInstance("com.insa.rila.xml");
+        JAXBContext jc = JAXBContext.newInstance("com.insa.rila.xml.paragraph");
         Unmarshaller u = jc.createUnmarshaller();
         Object o = u.unmarshal(file);
 

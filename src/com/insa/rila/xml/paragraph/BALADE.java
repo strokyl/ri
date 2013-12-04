@@ -4,7 +4,7 @@
 // Any modifications to this file will be lost upon recompilation of the source schema. 
 // Generated on: 2013.11.04 at 07:04:46 PM CET 
 //
-package com.insa.rila.xml;
+package com.insa.rila.xml.paragraph;
 
 import java.util.LinkedList;
 import java.util.List;

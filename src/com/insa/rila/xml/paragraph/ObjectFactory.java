@@ -6,7 +6,7 @@
 //
 
 
-package com.insa.rila.xml;
+package com.insa.rila.xml.paragraph;
 
 import javax.xml.bind.annotation.XmlRegistry;
 
