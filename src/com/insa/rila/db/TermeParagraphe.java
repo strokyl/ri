@@ -15,10 +15,13 @@ import java.util.Set;
 public class TermeParagraphe {
     private float tf;
     private float tf_robertson;
+    private float tf_idf;
     private final Paragraphe paragraphe;
     private final Terme terme;
     private final Set<Apparition> apparitions;
     private int id;
+
+
 
     /**
      * Créer un terme_paragraphe qui s'ajoute automatiquement
@@ -60,6 +63,14 @@ public class TermeParagraphe {
         this.tf = tf;
     }
 
+     public float getTf_idf() {
+        return tf_idf;
+    }
+
+    public void setTf_idf(float tf_idf) {
+        this.tf_idf = tf_idf;
+    }
+
     public float getTf_robertson() {
         return tf_robertson;
     }
@@ -83,7 +94,7 @@ public class TermeParagraphe {
        return ter.getId()== this.terme.getId();
     }
 
-    public void incTf() {
-        this.tf++;
+    public void incTf(float ponderation) {
+        this.tf+=ponderation;
     }
 }

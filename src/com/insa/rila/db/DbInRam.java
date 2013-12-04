@@ -23,6 +23,9 @@ public class DbInRam {
 	private final Set<Position> positions;
 	private final Set<Apparition> apparitions;
 	public static final int NUM_INSERT_IN_ROW = 10000;
+        private float MaxTf = 0;
+        private float nbMoyDoc =0;
+        private float nbMaxDoc =0;
 
 	public DbInRam() {
 		termes = new HashSet<Terme>();
@@ -104,9 +107,10 @@ public class DbInRam {
 
 	private void saveTerme(Connection c) throws SQLException {
 		int id = 0;
+                CalcIdf();
 		PreparedStatement ps = c.prepareStatement("INSERT INTO ri.terme VALUES (?, ?, ?)");
 		for (Terme terme : termes) {
-			CalcIdf(terme);
+			
 			ps.setInt(1, id);
 			terme.setId(id);
 			ps.setString(2, terme.getRacine());
@@ -127,8 +131,9 @@ public class DbInRam {
 
 	private void saveParagraphe(Connection c) throws SQLException {
 		int id = 0;
-
-		PreparedStatement ps = c.prepareStatement("INSERT INTO ri.paragraphe VALUES (?, ?, ?, ?)");
+                moyPara();
+                nbMoyDoc = nbMaxDoc/paragraphes.size();
+                PreparedStatement ps = c.prepareStatement("INSERT INTO ri.paragraphe VALUES (?, ?, ?, ?)");
 		for (Paragraphe par : paragraphes) {
 			ps.setInt(1, id);
 			par.setId(id);
@@ -151,9 +156,11 @@ public class DbInRam {
 
 	private void saveTermeParagraphe(Connection c) throws SQLException {
 		int id = 0;
+                calcTfIdf();
+                calcTfRobert();
 		PreparedStatement ps = c.prepareStatement("INSERT INTO ri.terme_paragraphe VALUES (?, ?, ?, ?, ?)");
 		for (TermeParagraphe termePara : termeParagraphes) {
-			calcTfIdf(termePara);
+			
 			ps.setInt(1, id);
 			termePara.setId(id);
 			ps.setFloat(2, termePara.getTf());
@@ -242,14 +249,41 @@ public class DbInRam {
 		System.out.println("apapritionTypes mis en table");
 	}
 
-	private void CalcIdf(Terme ter) {
+	private void CalcIdf() {
 		int nbTotalDoc = paragraphes.size();
-		int nbDocApp = ter.getTermeParagraphes().size();
-		ter.setIpf((float) Math.log(nbTotalDoc / nbDocApp));
+                int nbDocApp = 0;
+                for(Terme ter : termes)
+                {
+                    nbDocApp = ter.getTermeParagraphes().size();
+                    ter.setIpf((float) Math.log(nbTotalDoc / nbDocApp));
+                }
 	}
 
-	private void calcTfIdf(TermeParagraphe termePara) {
-		termePara.setTf_robertson(termePara.getTerme().getIpf() * termePara.getTf());
+	private void calcTfIdf() {
+                for(TermeParagraphe termePara : termeParagraphes)
+                {
+                    termePara.setTf_robertson(termePara.getTerme().getIpf() * termePara.getTf());
+                }
 	}
+
+        private void calcTfRobert() {
+
+        for(TermeParagraphe termPara : termeParagraphes)
+        {
+            int longueur_doc = termPara.getParagraphe().getSommAppTerm();
+            termPara.setTf_robertson((float) (termPara.getTf() / (0.5 + 1.5 * (longueur_doc / nbMoyDoc)+termPara.getTf())));
+
+        }
+
+    }
+         //calcuer la  longueur moyenne du paragraphe : faire la somme des longueures de tous les paragraphes et diviser par le nb de paraphraphes
+    private void moyPara()
+    {
+        for(Paragraphe para: paragraphes)
+        {
+            nbMaxDoc += para.getSommAppTerm();
+        }
+
+    }
 
 }
