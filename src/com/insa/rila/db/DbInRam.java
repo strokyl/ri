@@ -28,7 +28,6 @@ public class DbInRam {
         private float nbMoyDoc =0;
         private float nbMaxDoc =0;
 
-
 	public DbInRam() {
 		termes = new HashSet<Terme>();
 		documents = new HashSet<Document>();
@@ -135,7 +134,7 @@ public class DbInRam {
 		int id = 0;
                 moyPara();
                 nbMoyDoc = nbMaxDoc/paragraphes.size();
-		PreparedStatement ps = c.prepareStatement("INSERT INTO ri.paragraphe VALUES (?, ?, ?, ?)");
+                PreparedStatement ps = c.prepareStatement("INSERT INTO ri.paragraphe VALUES (?, ?, ?, ?)");
 		for (Paragraphe par : paragraphes) {
 			ps.setInt(1, id);
 			par.setId(id);
@@ -158,8 +157,6 @@ public class DbInRam {
 
 	private void saveTermeParagraphe(Connection c) throws SQLException {
 		int id = 0;
-                //calculTfMax();
-                //updateTf();
                 calcTfIdf();
                 calcTfRobert();
 		PreparedStatement ps = c.prepareStatement("INSERT INTO ri.terme_paragraphe VALUES (?, ?, ?, ?, ?)");
@@ -254,63 +251,23 @@ public class DbInRam {
 	}
 
 	private void CalcIdf() {
-                int nbTotalDoc = paragraphes.size();
+		int nbTotalDoc = paragraphes.size();
                 int nbDocApp = 0;
                 for(Terme ter : termes)
                 {
                     nbDocApp = ter.getTermeParagraphes().size();
                     ter.setIpf((float) Math.log(nbTotalDoc / nbDocApp));
                 }
-		
-		
-		
 	}
-
 
 	private void calcTfIdf() {
                 for(TermeParagraphe termePara : termeParagraphes)
                 {
-                    termePara.setTf_idf(termePara.getTerme().getIpf() * termePara.getTf());
-                    
+                    termePara.setTf_robertson(termePara.getTerme().getIpf() * termePara.getTf());
                 }
-		
 	}
 
-
-
-         public void calculTfMax()
-        {
-            for(TermeParagraphe termePara: termeParagraphes)
-            {
-
-                if(termePara.getTf() > this.MaxTf)
-                {
-                    this.MaxTf = termePara.getTf();
-                }
-            }
-        }
-
-        public float getTfMax()
-        {
-            return this.MaxTf;
-        }
-
-        public void setTfMax(float tfmax)
-        {
-            this.MaxTf = tfmax;
-        }
-
-
-    private void updateTf() {
-
-        for(TermeParagraphe termPara : termeParagraphes)
-        {
-
-            termPara.setTf(termPara.getTf()/this.MaxTf);
-        }
-    }
-
-    private void calcTfRobert() {
+        private void calcTfRobert() {
 
         for(TermeParagraphe termPara : termeParagraphes)
         {
@@ -319,10 +276,8 @@ public class DbInRam {
 
         }
 
-
     }
-
-    //calcuer la  longueur moyenne du paragraphe : faire la somme des longueures de tous les paragraphes et diviser par le nb de paraphraphes
+         //calcuer la  longueur moyenne du paragraphe : faire la somme des longueures de tous les paragraphes et diviser par le nb de paraphraphes
     private void moyPara()
     {
         for(Paragraphe para: paragraphes)
@@ -331,7 +286,5 @@ public class DbInRam {
         }
 
     }
-
-
 
 }

@@ -210,7 +210,7 @@ public class Index {
             index++;
         }
 
-        result.calculTfMax();
+        //result.calculTfMax();
 
         
     }
