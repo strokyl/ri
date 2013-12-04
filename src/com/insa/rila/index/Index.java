@@ -204,7 +204,7 @@ public class Index {
             }
 
             position = new Position(apparition, index);
-            termeParagraphe.incTf();
+            termeParagraphe.incTf(apparitionType.getPonderation());
             result.addPosition(position);
 
             index++;

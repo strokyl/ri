@@ -15,6 +15,7 @@ import java.util.Set;
 public class TermeParagraphe {
     private float tf;
     private float tf_robertson;
+    private float tf_idf;
     private final Paragraphe paragraphe;
     private final Terme terme;
     private final Set<Apparition> apparitions;
@@ -83,7 +84,15 @@ public class TermeParagraphe {
        return ter.getId()== this.terme.getId();
     }
 
-    public void incTf() {
-        this.tf++;
+    public void incTf(float poids) {
+        this.tf+=poids;
+    }
+
+     public float getTf_idf() {
+        return tf_idf;
+    }
+
+    public void setTf_idf(float tf_idf) {
+        this.tf_idf = tf_idf;
     }
 }
