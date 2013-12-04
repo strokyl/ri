@@ -137,6 +137,7 @@ public class DbInRam {
                 nbMoyDoc = nbMaxDoc/paragraphes.size();
 		PreparedStatement ps = c.prepareStatement("INSERT INTO ri.paragraphe VALUES (?, ?, ?, ?)");
 		for (Paragraphe par : paragraphes) {
+
 			ps.setInt(1, id);
 			par.setId(id);
 			ps.setString(2, par.getXpath());
@@ -150,6 +151,7 @@ public class DbInRam {
 				ps.clearBatch();
 			}
 		}
+
 		ps.clearParameters();
 		int[] results = ps.executeBatch();
 		System.out.println("paragraphes mis en table");
@@ -163,6 +165,7 @@ public class DbInRam {
                 calcTfRobert();
 		PreparedStatement ps = c.prepareStatement("INSERT INTO ri.terme_paragraphe VALUES (?, ?, ?, ?, ?)");
 		for (TermeParagraphe termePara : termeParagraphes) {
+			
 			ps.setInt(1, id);
 			termePara.setId(id);
 			ps.setFloat(2, termePara.getTf());
@@ -264,7 +267,6 @@ public class DbInRam {
 		
 	}
 
-
 	private void calcTfIdf() {
                 for(TermeParagraphe termePara : termeParagraphes)
                 {
@@ -280,11 +282,11 @@ public class DbInRam {
         {
             for(TermeParagraphe termePara: termeParagraphes)
             {
-
                 if(termePara.getTf() > this.MaxTf)
                 {
                     this.MaxTf = termePara.getTf();
                 }
+
             }
         }
 
@@ -297,7 +299,6 @@ public class DbInRam {
         {
             this.MaxTf = tfmax;
         }
-
 
     private void updateTf() {
 
@@ -327,9 +328,9 @@ public class DbInRam {
         {
             nbMaxDoc += para.getSommAppTerm();
         }
+        nbMoyDoc = nbMaxDoc/ paragraphes.size();
 
     }
-
 
 
 }
