@@ -1,0 +1,233 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix : <http://ontologies.alwaysdata.net/space#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://ontologies.alwaysdata.net/space> .
+
+<http://ontologies.alwaysdata.net/space> rdf:type owl:Ontology ;
+  rdfs:comment "very simple ontology on the space domain, build for teaching purpose."@en .
+
+
+
+
+
+#################################################################
+#
+#    Object Properties
+#
+#################################################################
+
+
+###  http://ontologies.alwaysdata.net/space#hasArtificialSatellite
+
+:hasArtificialSatellite rdf:type owl:ObjectProperty ;
+                        
+                        rdfs:label "has artificial satellite"@en ;
+                        
+                        rdfs:range :Artefact ;
+                        
+                        rdfs:subPropertyOf :hasSatellite .
+
+
+
+###  http://ontologies.alwaysdata.net/space#hasNaturalSatellite
+
+:hasNaturalSatellite rdf:type owl:ObjectProperty ;
+                     
+                     rdfs:label "has natural satellite"@en ;
+                     
+                     rdfs:range :CelestialBody ;
+                     
+                     rdfs:subPropertyOf :hasSatellite .
+
+
+
+###  http://ontologies.alwaysdata.net/space#hasSatellite
+
+:hasSatellite rdf:type owl:ObjectProperty ;
+              
+              rdfs:label "has satellite"@en ;
+              
+              rdfs:domain :CelestialBody .
+
+
+
+
+
+#################################################################
+#
+#    Data properties
+#
+#################################################################
+
+
+
+###  http://ontologies.alwaysdata.net/space#hasRadius
+
+:hasRadius rdf:type owl:DatatypeProperty ;
+           
+           rdfs:label "has orbital period"@en ;
+           
+           rdfs:domain :CelestialBody ;
+           
+           rdfs:range xsd:double .
+
+
+
+
+
+#################################################################
+#
+#    Classes
+#
+#################################################################
+
+
+###  http://ontologies.alwaysdata.net/space#Artefact
+
+:Artefact rdf:type owl:Class ;
+          
+          rdfs:label "artefact"@en .
+
+
+
+###  http://ontologies.alwaysdata.net/space#CelestialBody
+
+:CelestialBody rdf:type owl:Class ;
+               
+               rdfs:subClassOf :NaturalObject ;
+               
+               rdfs:label "celestial body"@en .
+
+
+
+###  http://ontologies.alwaysdata.net/space#NaturalObject
+
+:NaturalObject rdf:type owl:Class ;
+               
+               rdfs:label "natural object"@en .
+
+
+
+###  http://ontologies.alwaysdata.net/space#Planet
+
+:Planet rdf:type owl:Class ;
+        
+        rdfs:subClassOf :CelestialBody ;
+        
+        rdfs:label "planet"@en .
+
+
+
+###  http://ontologies.alwaysdata.net/space#Star
+
+:Star rdf:type owl:Class ;
+      
+      rdfs:subClassOf :CelestialBody ;
+      
+      rdfs:label "star"@en .
+
+
+
+
+
+#################################################################
+#
+#    Individuals
+#
+#################################################################
+
+
+###  http://ontologies.alwaysdata.net/space#Deimos
+
+:Deimos rdf:type :CelestialBody ;
+        
+        rdfs:label "Deimos"@en .
+
+
+
+###  http://ontologies.alwaysdata.net/space#Earth
+
+:Earth rdf:type :Planet ;
+       
+       rdfs:label "Earth"@en ,
+                  "the blue planet"@en ,
+                  "Terre"@fr ;
+       
+       :hasRadius "6372.8"^^xsd:double ;
+       
+       :hasArtificialSatellite :InternationalSpaceStation ;
+       
+       :hasNaturalSatellite :Moon .
+
+
+
+###  http://ontologies.alwaysdata.net/space#InternationalSpaceStation
+
+:InternationalSpaceStation rdf:type :Artefact ;
+                           
+                           rdfs:label "ISS"@en ,
+                                      "International Space Station"@en .
+
+
+
+###  http://ontologies.alwaysdata.net/space#Jupiter
+
+:Jupiter rdf:type :Planet ;
+         
+         rdfs:label "jupiter"@en .
+
+
+
+###  http://ontologies.alwaysdata.net/space#Moon
+
+:Moon rdf:type :CelestialBody ;
+      
+      rdfs:label "Moon"@en ;
+      
+      :hasRadius "1737.1"^^xsd:double .
+
+
+
+###  http://ontologies.alwaysdata.net/space#Phobos
+
+:Phobos rdf:type :CelestialBody ;
+        
+        rdfs:label "Phobos"@en .
+
+
+
+###  http://ontologies.alwaysdata.net/space#Sun
+
+:Sun rdf:type :Star ;
+     
+     rdfs:label "Sun"@en ;
+     
+     :hasRadius "1.392e6"^^xsd:double ;
+     
+     :hasNaturalSatellite :Earth ,
+                          :Jupiter ,
+                          :Venus ,
+                          [ rdf:type :Planet ;
+                            rdfs:label "Mars"@en ;
+                            rdfs:label "the red planet"@en ;
+                            :hasRadius "3402.5"^^xsd:double ;
+                            :hasNaturalSatellite :Deimos ,
+                                                 :Phobos
+                          ] ,
+                          [ rdf:type :Planet ;
+                            rdfs:label "Mercury"@en ;
+                            :hasRadius "2439.7"^^xsd:double
+                          ] .
+
+
+
+###  http://ontologies.alwaysdata.net/space#Venus
+
+:Venus rdf:type :Planet ;
+       
+       rdfs:label "venus"@en ;
+       
+       :hasRadius "6051.9"^^xsd:double .
