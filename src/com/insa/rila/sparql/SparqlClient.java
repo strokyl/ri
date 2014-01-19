@@ -34,6 +34,17 @@ public class SparqlClient {
      */
     private String endpointUri = null;
 
+    private static SparqlClient defaultClient;
+
+    public static SparqlClient getSparqlClient() {
+
+	    if(defaultClient == null) {
+	    	defaultClient =  new SparqlClient("127.0.0.1:3030/space");
+	    }
+
+	    return defaultClient;
+    }
+
     public SparqlClient(String endpointUri) {
         this.endpointUri = endpointUri;
     }

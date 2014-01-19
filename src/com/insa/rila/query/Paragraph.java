@@ -3,17 +3,26 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.insa.rila.query;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.w3c.dom.Document;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathFactory;
 
 /**
  * Cette classe une réponse possible à une requête
+ *
  * @author Luc DUZAN
  */
 public class Paragraph {
+
 	private final String xpath;
 	private final String xmlUrl;
 	private final Map<String, Float> mapTermePoids;
@@ -36,6 +45,22 @@ public class Paragraph {
 		return xmlUrl;
 	}
 
+	public String getText() {
+		DocumentBuilder builder;
+		try {
+			builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			Document doc = builder.parse(xmlUrl);
+			XPath xpath = XPathFactory.newInstance().newXPath();
+			XPathExpression expr = xpath.compile(this.xpath);
+			return  String.format("Tf.Idf  : %s\n", mapTermePoids) + expr.evaluate(doc);
+			
+		} catch (Exception ex) {
+			Logger.getLogger(Paragraph.class.getName()).log(Level.SEVERE, null, ex);
+			return null;
+		}
+
+	}
+
 	public Map<String, Float> getMapTermePoids() {
 		return mapTermePoids;
 	}
@@ -49,10 +74,10 @@ public class Paragraph {
 	}
 
 	public float getPertinance() {
-		if(pertinance == null) {
+		if (pertinance == null) {
 			computePertinance();
 		}
-		
+
 		return pertinance;
 	}
 
@@ -86,8 +111,5 @@ public class Paragraph {
 		}
 		return true;
 	}
-
-
-	
 
 }

@@ -1,6 +1,5 @@
 package com.insa.rila.sparql;
 
-import com.insa.rila.sparql.SparqlClient;
 import java.util.Map;
 
 public class SparqlClientExample {
@@ -9,40 +8,10 @@ public class SparqlClientExample {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        SparqlClient sparqlClient = new SparqlClient("127.0.0.1:3030/space");
-
-        String query = "ASK WHERE { ?s ?p ?o }";
-        boolean serverIsUp = sparqlClient.ask(query);
-        if (serverIsUp) {
-            System.out.println("server is UP");
-
-            nbPersonnesParPiece(sparqlClient);
-
-            System.out.println("ajout d'une personne dans le bureau:");
-            query = "PREFIX : <http://www.lamaisondumeurtre.fr#>\n"
-                    + "PREFIX instances: <http://www.lamaisondumeurtre.fr/instances#>\n"
-                    + "INSERT DATA\n"
-                    + "{\n"
-                    + "  instances:Bob :personneDansPiece instances:Bureau.\n"
-                    + "}\n";
-            sparqlClient.update(query);
-
-            nbPersonnesParPiece(sparqlClient);
-
-            System.out.println("suppression d'une personne du bureau:");
-            query = "PREFIX : <http://www.lamaisondumeurtre.fr#>\n"
-                    + "PREFIX instances: <http://www.lamaisondumeurtre.fr/instances#>\n"
-                    + "DELETE DATA\n"
-                    + "{\n"
-                    + "  instances:Bob :personneDansPiece instances:Bureau.\n"
-                    + "}\n";
-            sparqlClient.update(query);
-            
-            nbPersonnesParPiece(sparqlClient);
-            
-        } else {
-            System.out.println("service is DOWN");
-        }
+	    
+	    for(String word : SparqlQuery.getAllLabel()) {
+		    System.out.println(word);
+	    }
     }
     
     private static void nbPersonnesParPiece(SparqlClient sparqlClient) {

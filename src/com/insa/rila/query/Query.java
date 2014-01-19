@@ -15,14 +15,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.Set;
 
 /**
  *
@@ -30,19 +30,51 @@ import java.util.Set;
  */
 public class Query {
 
-	private final List<String> termes;
+	public final boolean useSemantic;
+	private final Map<String, Float> vector;
 	private final int id;
 	private final static String EXPECTED_REP_URL = "qrels/qrel%02d.txt";
 
-	private Set<Paragraph> expectedParagraph;
+	private Collection<Paragraph> expectedParagraph;
 	private List<Paragraph> result;
+	private final boolean useIdf;
+	private final String query;
 
 	public Query(int id, String query) throws IOException {
-		this.termes = Index.getTokenList(query);
+		this(id, query, true, true);
+	}
+
+	public Query(int id, String query, boolean useIdf, boolean useSemantic) throws IOException {
+		this.useSemantic = useSemantic;
+		this.useIdf = useIdf;
+		this.query = query;
+		if (useSemantic) {
+			SemanticQuery sq = new SemanticQuery(query);
+			this.vector = sq.getVector();
+		} else {
+			vector = new HashMap<String, Float>();
+		}
+
+		Float previousCoeff;
+		for (String word : Index.getTokenList(query)) {
+			previousCoeff = vector.get(word);
+			vector.put(word, previousCoeff == null ? 1.0f : 1.0f + vector.get(word));
+		}
 		this.id = id;
 	}
 
-	public Set<Paragraph> getExpectedParagraph() {
+	public String getQuery() {
+		return query;
+	}
+
+	public Collection<Paragraph> getExpectedParagraph() {
+		if (expectedParagraph == null) {
+			try {
+				parseExpectedParagraph();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
 		return expectedParagraph;
 	}
 
@@ -52,14 +84,14 @@ public class Query {
 		String fileUrl;
 		String xpath;
 		boolean pertinant;
-		expectedParagraph = new HashSet<Paragraph>();
-		while(scanner.hasNext()) {
+		expectedParagraph = new LinkedList<Paragraph>();
+		while (scanner.hasNext()) {
 			line = scanner.nextLine().split("\\s+");
 			fileUrl = line[0];
 			xpath = line[1];
 			pertinant = Integer.parseInt(line[2]) == 1;
 
-			if(pertinant) {
+			if (pertinant) {
 				expectedParagraph.add(new Paragraph(xpath, fileUrl, this));
 			}
 		}
@@ -71,15 +103,15 @@ public class Query {
 		Connection connection = PostGreFactory.getConnect();
 		StringBuilder builder = new StringBuilder();
 		builder.append("SELECT paragraphe.paragraphe_id, terme.racine, terme.ipf, terme_paragraphe.tf_robertson,paragraphe.xpath, document.url_xml FROM terme NATURAL JOIN terme_paragraphe NATURAL JOIN paragraphe INNER JOIN document on paragraphe.document_id = document.document_id WHERE racine in (");
-		for (int i = 0; i < termes.size() - 1; i++) {
+		for (int i = 0; i < vector.size() - 1; i++) {
 			builder.append("?, ");
 		}
 		builder.append("? );");
 		String requete = builder.toString();
-		System.out.println(requete);
 		PreparedStatement ps = connection.prepareStatement(requete);
 		int id = 1;
-		for (String terme : termes) {
+
+		for (String terme : vector.keySet()) {
 			ps.setString(id, terme);
 			id++;
 		}
@@ -105,10 +137,10 @@ public class Query {
 			paragraph = paragraphs.get(id);
 			if (paragraph == null) {
 				paragraph = new Paragraph(xpath, url, this);
-				paragraph.addTerme(racine, ipf * tf);
+				paragraphs.put(id, paragraph);
 			}
+			paragraph.addTerme(racine, useIdf ? (ipf * tf) : 1.0f);
 
-			paragraphs.put(id, paragraph);
 		}
 
 		paragraphsTrie = new ArrayList<Paragraph>(paragraphs.values());
@@ -121,6 +153,7 @@ public class Query {
 
 		});
 
+		//System.out.println(paragraphsTrie.get(0).getText());
 		this.result = paragraphsTrie;
 		return paragraphsTrie;
 	}
@@ -133,9 +166,10 @@ public class Query {
 	public float computePertinance(Paragraph paragraph) {
 		//TODO a améliorer
 		float result = 0.0f;
+		final Map<String, Float> mapTermePoids = paragraph.getMapTermePoids();
 
-		for (float p : paragraph.getMapTermePoids().values()) {
-			result += p;
+		for (String token : mapTermePoids.keySet()) {
+			result += mapTermePoids.get(token) * vector.get(token);
 		}
 
 		return result;
@@ -144,10 +178,10 @@ public class Query {
 	public int avoirPrecission(int N) {
 		int tot = 0;
 
-		for(int i= 0; i < N ;i++) {
-			if(expectedParagraph.contains(result.get(i))){
+		for (int i = 0; i < N; i++) {
+			if (expectedParagraph.contains(result.get(i))) {
 				tot++;
-			}	
+			}
 		}
 
 		return tot;
@@ -156,4 +190,13 @@ public class Query {
 	public int getId() {
 		return id;
 	}
+
+	public Map<String, Float> getVector() {
+		return vector;
+	}
+
+	public List<Paragraph> getResult() {
+		return result;
+	}
+
 }
