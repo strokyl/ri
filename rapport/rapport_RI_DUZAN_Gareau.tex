@@ -1,5 +1,5 @@
 \documentclass{article}
-\usepackage[utf8]{inputenc}
+\usepackage[utf8x]{inputenc}
 \usepackage[cyr]{aeguill}
 \usepackage[francais]{babel}
 \usepackage{amsmath,amsfonts,amsthm} % Math packages
@@ -7,11 +7,13 @@
 \usepackage{url}
 \usepackage{array}
 \usepackage{geometry}
+\usepackage{float}
 \geometry{hmargin=2.5cm,vmargin=1.5cm}
 \title{Rapport du projet de représentation des connaissances :\\
 De la recherche d'information au Web Sémantique}
 \author{Gareau Adrien, Duzan Luc}
 \begin{document}
+\renewcommand{\labelitemi}{$\bullet$}
 \maketitle
 \section{Introduction}
 
@@ -19,17 +21,17 @@ Durant ce projet nous avons dû créer un moteur d'indexation et de recherche
 d'éléments XML. Notre moteur doit pouvoir retourner une liste de paragraphes
 pertinents contenus dans des documents XML. En effet, nous avons une liste de
 fichiers XML relatant différents récits sur des balades et notre moteur doit indexer
-le contenu de ces fichiers et être capable de faire des recherche sur la collection
-de document.
+le contenu de ces fichiers et être capable de faire des recherches sur la collection
+de documents.
 
 \section{Indexation des données}
 
 \subsection{Choix de notre structure de données}
 La première étape consiste à créer la structure de notre base de données où l’on va
 pouvoir stocker les différents termes qui se trouvent dans les fichiers XML. Le
-schéma ci-dessous décrit comment nous avons décidé de créer notre base de données : 
+schéma de la figure 1 décrit comment nous avons décidé de créer notre base de données : 
 
-\begin{figure}[h!!]
+\begin{figure}[h!]
     \centering
     \caption{\label{schéma UML de notre base de donnée} Schéma UML de notre base de
 donnée}
@@ -47,19 +49,19 @@ fois que ce terme a été trouvé dans le paragraphe, on enregistre aussi les en
 où il apparaît dans le paragraphe ou dans des éléments décrivant le paragraphe ( dans
 un titre, sous titre ou une description). Cela nous permet aussi de pouvoir mettre
 une pondération en fonction de la position du terme.  Dans l’entité document, on
-stocke aussi le nombre d’apparitions totale pour un terme dans ce document.
-D’ailleurs la pondération sur le type d’apparition se fait en multipliant les
+stocke aussi le nombre d’apparitions totales pour un terme dans ce document.
+D’ailleurs, la pondération sur le type d’apparition se fait en multipliant les
 fréquences des mots :
 
 \begin{itemize}
     \item par 1,5 pour les titres
-    \item par 1,5 pour les sous titres
+    \item par 1,5 pour les sous-titres
     \item par 4,0 pour les paragraphes
     \item par 1,25 pour les descriptions
 \end{itemize}
 
 De plus, on calcule aussi pour chaque association paragraphe-terme le TF (terme
-frequency) ainsi que le TF-robertson (version pondéré du TF). Ainsi pour chaque terme
+frequency) ainsi que le TF-robertson (version pondérée du TF). Ainsi pour chaque terme
 à la fin de l’indexation on peut aisément calculer le TF-IDF. Nous avons choisi de
 stocker ces informations plutôt que de les calculer dynamiquement avant chaque
 requête, car nous économisons du temps au niveau des requêtes. En effet l’indexation
@@ -72,8 +74,8 @@ industriel.
 
 \subsection{Indexation des données}
 
-Nous nous sommes ensuite penché sur l’indexation des données. Nous avons tout d’abord
-décider d’utiliser l’API JAXB (Java Architecture for XML Binding )  pour transformer
+Nous nous sommes ensuite penchés sur l’indexation des données. Nous avons tout d’abord
+décidé d’utiliser l’API JAXB (Java Architecture for XML Binding )  pour transformer
 un fichier XML en objets Java. 
 
 Nous avons ensuite créé les classes correspondantes au schéma de notre base de
@@ -103,7 +105,7 @@ une procédure pour formater et indexer les données pour faciliter les recherch
         permettant de délimiter les mots. 
 
     \item Suppression des stopwords. Grâce à la liste fournie nous pouvons enlever
-        tous les mots inutiles lors d’une recherche et donc qui ne nécessite pas
+        tous les mots inutiles lors d’une recherche et donc qui ne nécessitent pas
         d’être stockés dans la base de données. Nous considérons qu’un mot est
         inutile quand il est vide de sens sémantique. Par exemple : “à”, “de” et
         “son”.
@@ -119,7 +121,7 @@ une procédure pour formater et indexer les données pour faciliter les recherch
         ou encore économie, car ces mots ont tous la même racine.
 
     \item Suppression des accents :  cela permet de rendre la recherche insensible aux
-        accents. En effet, les français oublient souvent de mettre des accents
+        accents. En effet, les Français oublient souvent de mettre des accents
         surtout les accents circonflexes.
 
 \end{itemize}
@@ -130,13 +132,13 @@ parcourir tous les termes afin de calculer le nombre d’apparitions de chacun, 
 fonction de leurs positions. On parcourt les différentes balises et on sauvegarde la
 position des termes trouvés ainsi que le nombre d’apparitions. Ces informations sont
 stockées dans une Map qui va associer les termes au nombre de fois où ils ont été
-trouvé.
+trouvés.
 
 
 De plus, nous pondérons les résultats en fonction de la position du terme : si un
 terme est trouvé dans le titre il aura un poids plus élevé. Pour un terme trouvé dans
 le titre on le pondère de 2,5, 1,5 pour le sous-titre et 1,25 pour la description. En
-ce qui concerne les éléments qui sont trouvés dans un paragraphe ont un poids de 4.
+ce qui concerne les éléments qui sont trouvés dans un paragraphe, ils ont un poids de 4.
 En effet, si un terme est trouvé une seule fois dans le titre mais très peu dans le
 paragraphe le document ne doit pas se retrouver devant un autre, où certes le terme
 n’est pas dans le titre mais beaucoup plus présent dans les paragraphes. C’est
@@ -150,9 +152,9 @@ d’un batch ne peut pas accéder 10 000 insertions . L’utilisation de batchs 
 temps d’accès à la base et donc le temps d’exécution, qui est d’environ 6-7 minutes.
 Juste avant d’insérer les données nous calculons le TF et les IDF. Tout d’abord, nous
 utilisons la formule du TF de Robertson vue en cours
-: $ TF= \frac{fréq} {0.5 + 1.5 * \frac{longueur_doc}{longueur_moy_doc} + fréq}$
-puis nous utilisons la formule pour calculer l’IDF : $log(\frac{N}{ni})$, avec N le
-nombre de paragraphes et ni le nombre de paragraphes contenant le terme en question.
+: $TF= \frac{\text{fréq}}{0.5 + 1.5 * \frac{\text{longueur doc}}{\text{longueur moyene doc}} + \text{fréq}}$
+puis nous utilisons la formule pour calculer l’IDF : $log(\frac{N}{n_i})$, avec N le
+nombre de paragraphes et $n_i$ le nombre de paragraphes contenant le terme en question.
 
 
 \section{Recherche}
@@ -168,27 +170,27 @@ Après avoir stocké les requêtes nous avons utilisé la même procédure que l
 l’indexation pour formater ces données (mettre tout en minuscule, enlever les
 accents, lemmatisation…). 
 
-Les chaines de caractères contenu dans la liste final seront par la suite désigné par
+Les chaines de caractères contenues dans la liste finale seront par la suite désignées par
 mot clef, bien qu’en réalité, ils sont lemmatisés (par exemple “amérique” est
-lemmatisé en “amer”) nous ne donnerons pas la version lemmatisé.
+lemmatisé en “amer”) nous ne donnerons pas la version lemmatisée.
 
-Nous obtenons donc une liste de mot clefs qui est associée à un poids de un
+Nous obtenons donc une liste de mots clefs qui est associée à un poids de un
 contrairement au mot clefs déduit de l’interrogation d’une ontologie qui auront un
 poids variable.
 
 
 \subsection{Création de la requête d'interrogation}
 
-Après avoir récupéré les mot clefs associés à la recherche, nous avons créé une
+Après avoir récupéré les mots clefs associés à la recherche, nous avons créé une
 requête qui va récupérer tous les paragraphes qui contiennent au moins un des mots
 clefs de la requête. 
 
-De plus nous calculons le TF-IDF pour chaque mot clefs et nous stockons ces résultats
-dans une “map” de le forme <Token , TF-IDF>, cette “map” correspond alors
+De plus nous calculons le TF-IDF pour chaque mot clef et nous stockons ces résultats
+dans une “map” de la forme <Token , TF-IDF>, cette “map” correspond alors
 conceptuellement à un vecteur. 
 
 Pour finir nous faisons un produit scalaire en la “map” créée avec les mots clefs
-contenus dans les paragraphes et la liste de mot clefs récupérée depuis la requête.
+contenus dans les paragraphes et la liste de mots clefs récupérée depuis la requête.
 
 \subsection{Sparql}
 
@@ -200,7 +202,7 @@ recherche. Par exemple, une recherche utilisant les termes “Balade en France�
 à coter d’un paragraphe parlant de “Randonnée à Toulouse” si ce dernier ne contient
 ni le mot “France”, ni le mot “balade” alors qu’il parle pourtant bien de balade en
 France. Les limites de la recherche par thème uniquement se sentent beaucoup sur des
-requêtes telle que :
+requêtes telles que :
 
 \begin{itemize}
 
@@ -208,7 +210,7 @@ requêtes telle que :
         contiennent pas le mot, “Asie” mais le nom d’un pays ou d’une ville d’Asie.
 
     \item “monuments religieux en Afrique”, même explication que pour l’Asie, de plus
-        on parle rarement de monuments mais plutôt d’un type de monument (église,
+        on parle rarement de monuments, mais plutôt d’un type de monument (église,
         immeuble par exemple)
 
     \item “animaux Pyrénées”, on ne trouve pas le mot “anima” mais des noms d’animaux
@@ -218,12 +220,12 @@ requêtes telle que :
 
 
 Pour pallier ce problème, nous avons utilisé une ontologie que nous avons interrogée
-à coup de requête SPARQL. Comme la qualité de l’ontologie n’était pas terrible,
+grâce à SPARQL. Malheureusement l'ontologie n'était pas complète,
 surtout au niveau des labels (il n’y avait pas les différentes versions avec ou sans
 majuscule, ou encore sans accent). Nous avons effectué une première requête pour
-récupérer tous les labels présent dans l’ontolologie. Nous avons ensuite recherché
-les labels dépouillés de leurs accents et de leurs majuscules sur la requête, elle
-même dépouillée de ses accents et de ses majuscules. Cela nous a permis d’obtenir la
+récupérer tous les labels présents dans l’ontolologie. Nous avons ensuite recherché
+les labels sans leurs accents et de leurs majuscules sur la requête. Nous avons aussi
+enlevé les accents et les majuscules de la requête. Cela nous a permis d’obtenir la
 liste des concepts présents dans l’ontologie ainsi que dans la requête. Pour chaque
 concept, nous avons effectué les requêtes suivantes afin de rajouter des termes
 à notre requête :
@@ -231,13 +233,13 @@ concept, nous avons effectué les requêtes suivantes afin de rajouter des terme
 \begin{itemize}
 
     \item chercher les objets qui sont des sous entités (subClassOf) du concept et
-        récupérer tout leur labels
+        récupérer tous leurs labels
 
     \item chercher tous les sous lieux de notre entité (si notre entité n’est pas un
         lieu, cela n’a pas de sens mais la requête ne retournera alors rien de toute
         manière)
 
-    \item chercher les lieux à coter de notre entité et récupérer leur label
+    \item chercher les lieux à côté de notre entité et récupérer leur label
 
     \item chercher les synonymes (en fait il s’agit de tous les labels de notre
         entité).
@@ -248,56 +250,58 @@ concept, nous avons effectué les requêtes suivantes afin de rajouter des terme
 
 \end{itemize}
 
-\begin{figure}[h!!]
+\begin{figure}[H]
     \centering
     \caption{Photographie d'un lamastronaute}
     \includegraphics[scale=0.4]{lama.jpg}
 \end{figure}
 
-Ces requêtes, nous, permettent alors de récupérer de nombreux labels qui sont alors
-traités comme les requêtes. C’est-à-dire qu’on leur enlève les accents, les
-majuscules, qu’on leur enlève les mots “vide de sens” (stopword), qu’on découpe le
-label en mot et qu’on lemmatise ces mots. Ainsi à partir des labels, on obtient une
-liste de mots clefs qui sont susceptibles d’être présent dans notre index inversé. Le
-problème de cette procédure est qu’elle génère beaucoup de mots clefs additionnels,
-il faut alors veiller à limiter “le bruit” amené par l’ajout de ces mots clefs, qui
-ont parfois, une fois isolé, une signification différente par rapport au concept
-originel présent dans la requête. Par exemple, la présence du mot “montagne” dans la
-requête “balade en montagne en Asie” va permettre de trouver le concept “montagne”
-dans l’ontologie qui a pour sous classe (entre autre) “montagne américaine” ce qui va
-donner après lemmatisation et séparation des mots le mot clef “amérique”qui va alors
-dégrader la qualité de la recherche surtout si ce mot clef n’est pas pondéré par
-rapport à Asie (l’exemple ici choisi est le plus catastrophique mais il est réel). De
-plus si un mot est associé à un concept dans l’ontologie, il va alors amener plein de
-mots clefs sémantiquement proche de lui dans la requête. Ce qui risque de ternir
-à l’influence d’un autre mot qui lui ne serait pas présent au seins de l’ontologie et
-qui dans le vecteur final de recherche serait alors représenté par un seul mot clef.
-C’est à ce moment-là que l’on fait intervenir la pondération des mots clefs du
-vecteur de recherche qui était avant systématiquement mis à 1. Maintenant, les mots
-clefs présents au seins même de la requête garde cette pondération de 1. Alors que
-pour les mots clefs issus d’un concept présent au seins de la requête, il se voit
-assigner le coefficients de 1,2, s’ils sont issus d’un sous concept, de 1 s’ils sont
-issus d’un synonyme ou d’un sous lieu et de 0,3 s’ils sont issus d’un animal vivant
-dans le lieu ou d’un lieu à coter. Ensuite, les coefficients des mots clefs issue
-d’un même concepts sont divisés par leur somme puis multipliés par 1,3 (valeur
-obtenue empiriquement). Ainsi la représentation total d’un concept par ces mots clefs
-déduit indirectement est toujours de 1,3.
+Ces requêtes, nous permettent alors de récupérer de nombreux labels qui sont
+alors traités comme les requêtes. C’est-à-dire qu’on leur enlève les accents,
+les majuscules, qu’on leur enlève les mots “vide de sens” (stopword), qu’on
+découpe le label en mot et qu’on lemmatise ces mots. Ainsi à partir des labels,
+on obtient une liste de mots clefs qui sont susceptibles d’être présents dans
+notre index inversé. Le problème de cette procédure est qu’elle génère beaucoup
+de mots clefs additionnels, il faut alors veiller à limiter “le bruit” amené
+par l’ajout de ces mots clefs, qui ont parfois, une fois isolé, une
+signification différente par rapport au concept originel présent dans la
+requête. Par exemple, la présence du mot “montagne” dans la requête “balade en
+montagne en Asie” va permettre de trouver le concept “montagne” dans
+l’ontologie qui a pour sous classe (entre autres) “montagne américaine”. Cela
+va donner après lemmatisation et séparation des mots le mot clef “amérique”qui
+va alors dégrader la qualité de la recherche surtout si ce mot clef n’est pas
+pondéré par rapport à Asie (l’exemple ici choisi est le plus catastrophique
+mais il est réel). De plus si un mot est associé à un concept dans l’ontologie,
+il va alors amener des mots clefs sémantiquement proches de lui dans la
+requête. Ce qui risque de diminuer fortement l’influence d’un autre mot qui lui
+ne serait pas présent au sein de l’ontologie et qui dans le vecteur final de
+recherche serait alors représenté par un seul mot clef.  C’est à ce moment-là
+que l’on fait intervenir la pondération des mots clefs du vecteur de recherche
+qui était avant systématiquement mis à 1. Maintenant, les mots clefs présents
+au sein même de la requête gardent cette pondération de 1. Alors que pour les
+mots clefs issus d’un concept présent au sein de la requête se voient assigner
+les coefficients de 1,2, s’ils sont issus d’un sous concept, de 1 s’ils sont
+issus d’un synonyme ou d’un sous lieu et de 0,3 s’ils sont issus d’un animal
+vivant dans le lieu ou d’un lieu à côté. Ensuite, les coefficients des mots
+clefs issus d’un même concept sont divisés par leur somme puis multipliés par
+1,3 (valeur obtenue empiriquement). Ainsi la représentation totale d’un concept
+par ses mots clefs déduientt indirectement est toujours de 1,3.
 
 Malheureusement, l’ontologie n’est pas bien fournie, surtout pour l’Asie où nous
-avons rajouté des pays, ainsi que certaines villes. J’ai également remarqué que la
-relation “à coter de” n’était pas exploité dans l’ontologie. De plus, l’utilisation
+avons rajouté des pays, ainsi que certaines villes. Nous avons également remarqué que la
+relation “à côté de” n’était pas exploitée dans l’ontologie. De plus, l’utilisation
 qu’on a de l’ontologie amène des fois des mots clefs parasites comme le montre
-l’exemple des “montagne en Asie” au-dessus. Une bonne idée aurait été de stocké dans
+l’exemple des “montagne en Asie” au-dessus. Une bonne idée aurait été de stocker dans
 l’indexe inversé les labels entiers tels qui sont présents dans l’ontologie en plus
 des mots clefs lemmatisés, car beaucoup de concept ont des labels sur deux mots
-(“Mont Blanc”, “Montagne Amérique”) et que la séparation de ces mots amènent souvent
+(“Mont Blanc”, “Montagne Amérique”) et que la séparation de ces mots amène souvent
 du bruit.
 
 \section{Benchmark}
 
 \subsection{Requête 1 : \og balade au Mont Blanc \fg }
 
-\begin{table}[h!!]
+\begin{table}[H]
     \centering
     \caption{Requête 1}
 \begin{tabular}{|l|c|c|c|}
@@ -317,13 +321,13 @@ Sur cette requête, on remarque notamment l'efficacité du tf.idf, en effet beau
 paragraphes contiennent le mot “mont” et peu contiennent le mot blanc. Le tf.idf
 permet alors de mettre en avant ceux qui contiennent le mot “blanc” et limite la
 pollution des documents qui contiennent le mot “mont”  mais qui n’ont aucun rapport
-avec le mot “blanc”. Concernant l’ontologie, elle n’apporte peu de nouveau mot clef
+avec le mot “blanc”. Concernant l’ontologie, elle n’apporte peu de nouveaux mots clefs
 sur cette requête et ne permet donc pas d’amélioration.
 
 
 \subsection{Requête 2 : \og balade montagne Amérique latine \fg }
 
-\begin{table}[h!!]
+\begin{table}[H]
     \centering
     \caption{Requête 2}
 \begin{tabular}{|l|c|c|c|}
@@ -340,9 +344,9 @@ sur cette requête et ne permet donc pas d’amélioration.
 \end{table}
 
 Ici le résultat déplorable des recherches sans l’aide de l’ontologie est
-compréhensible car quand un document parle d’une balade en Amérique latine, elle
-n’utilise pas en général le mot “Amérique latine” mais elle parle plus souvent d’un
-pays spécifique telle que le Pérou. L’utilisation de l’ontologie permet bien de
+compréhensible car quand un document parle d’une balade en Amérique latine, il
+n’utilise pas en général le mot “Amérique latine” mais il parle plus souvent d’un
+pays spécifique tel que le Pérou. L’utilisation de l’ontologie permet bien de
 rajouter une longue liste de pays d’Amérique latine à la requête et le fait que les
 résultats sont si mauvais est surprenant. L'analyse des paragraphes trouvés et des
 paragraphes attendus montre deux phénomènes expliquant cela :
@@ -350,13 +354,13 @@ paragraphes attendus montre deux phénomènes expliquant cela :
 \begin{itemize}
 
     \item les paragraphes attendus ne citent pas de pays d’Amérique latine, mais des
-        lieux bien plus précis (monument ou lieu naturelle) qui ne sont pas dans
+        lieux bien plus précis (monument ou lieu naturel) qui ne sont pas dans
         l’ontologie
 
     \item la liste très longue des pays amènent une grande division de leurs
         coefficients dans le vecteur de requête. Alors que les mots clefs de base
         (“montagne”, “Amérique”, “latine”) ont toujours des coefficients de 1, les
-        paragraphes en tête sont ceux qui contiennent et/ou ces mots là. Or notre
+        paragraphes en tête sont ceux qui contiennent et/ou ces mots-là. Or notre
         moteur ne gérant pas “les mots clefs à deux mots”, il remonte des paragraphes
         parlant d’Espagne à cause du mot latin ou de montagnes (qui ne sont pas en
         Amérique latine) à cause de “montagne”.
@@ -365,7 +369,7 @@ paragraphes attendus montre deux phénomènes expliquant cela :
 
 \subsection{Requête 3 : \og monuments Afrique \fg }
 
-\begin{table}[h!!]
+\begin{table}[H]
     \centering
     \caption{Requête 3}
 \begin{tabular}{|l|c|c|c|}
@@ -381,16 +385,16 @@ paragraphes attendus montre deux phénomènes expliquant cela :
 \end{tabular}
 \end{table}
 
-Bien que les résultats ne puissent conclure à une amélioration de l’utilisation de
-l’ontologie. L’analyse des paragraphes sélectionnés montrent qu’ils sont aussi
-pertinents que ceux attendu.  Du point de vue personnel, nous trouvons qu’ici la
+Bien que les résultats ne peuvent conclure à une amélioration de l’utilisation de
+l’ontologie, l’analyse des paragraphes sélectionnés montre qu’ils sont aussi
+pertinents que ceux attendus.  D'un point de vue personnel, nous trouvons qu’ici la
 liste des paragraphes attendus n’est sûrement pas assez complète. L’ontologie a bien
-fonctionné, car elle a renvoyé quelque pays d’Afrique (peut être pas assez tout de
+fonctionné, car elle a renvoyé quelques pays d’Afrique (peut-être pas assez tout de
 même) et une bonne liste de monument (pyramide, cathédrale etc.)
 
 \subsection{Requête 4 : \og lacs de France \fg }
 
-\begin{table}[h!!]
+\begin{table}[H]
     \centering
     \caption{Requête 4}
 \begin{tabular}{|l|c|c|c|}
@@ -407,12 +411,12 @@ même) et une bonne liste de monument (pyramide, cathédrale etc.)
 \end{table}
 
 Rien de particulier à signaler, hormis que sur cette requête l’ontologie rajoute des
-noms de lac français en mot clefs, mais cela ne change rien car leur présence va
-souvent de paire avec celle des mots ‘lac’ et ‘France”.
+noms de lac français en mots clefs, mais cela ne change rien car leur présence va
+souvent de pair avec celle des mots ‘lac’ et ‘France”.
 
 \subsection{Requête 5 : \og liste des monuments religieux visités \fg }
 
-\begin{table}[h!!]
+\begin{table}[H]
     \centering
     \caption{Requête 5}
 \begin{tabular}{|l|c|c|c|}
@@ -429,14 +433,14 @@ souvent de paire avec celle des mots ‘lac’ et ‘France”.
 \end{table}
 
 Bien que l’ontologie est bien fait son travail en rajoutant une longue liste de
-monument religieux au seins de la requête, il n’y a pas beaucoup d’amélioration. On
+monument religieux au sein de la requête, il n’y a pas beaucoup d’amélioration. On
 remarque un phénomène similaire à celui de l’Amérique latine, l’isolation des mots
 “monuments” et “religieux” retourne des documents qui concernent soit les monuments
-soit la religieux mais pas les “monuments religieux”.
+soit la religion mais pas les “monuments religieux”.
 
 \subsection{Requête 6 : \og village randonnée montagne Asie \fg }
 
-\begin{table}[h!!]
+\begin{table}[H]
     \centering
     \caption{Requête 6}
 \begin{tabular}{|l|c|c|c|}
@@ -453,15 +457,15 @@ soit la religieux mais pas les “monuments religieux”.
 \end{table}
 
 Sur ce genre de requête l’utilisation de l’ontologie est plus que nécessaire pour les
-mêmes raison exposées pour la requête concernant l’Amérique latine. L’ontologie était
-assez démunie sur ce sujet là mais nous l’avons comblée. L’analyse des paragraphes
-retournés montrent qui sont pertinents. Les mauvais résultats sont dût à la
-médiocrité de la sélection des paragraphes attendu, en effet beaucoup concernent la
+mêmes raisons exposées pour la requête concernant l’Amérique latine. L’ontologie était
+assez démunie sur ce sujet-là mais nous l’avons comblée. L’analyse des paragraphes
+retournés montre qu'ils sont pertinents. Les mauvais résultats sont dûs à la
+médiocrité de la sélection des paragraphes attendus, en effet beaucoup concernent la
 Bolivie et l’Amérique latine…
 
 \subsection{Requête 7 : \og GR10 rando Pyrénées \fg }
 
-\begin{table}[h!!!]
+\begin{table}[H]
     \centering
     \caption{Requête 7}
 \begin{tabular}{|l|c|c|c|}
@@ -477,12 +481,12 @@ Bolivie et l’Amérique latine…
 \end{tabular}
 \end{table}
 
-Rien à signaler, l’ontologie rajoute le mot “grand” pour GR (“grande randonné”) et
+Rien à signaler, l’ontologie rajoute le mot “grand” pour GR (“grande randonnée”) et
 sentier.
 
 \subsection{Requête 8 : \og Animaux Pyrénées \fg }
 
-\begin{table}[h!!]
+\begin{table}[H]
     \centering
     \caption{Requête 8}
 \begin{tabular}{|l|c|c|c|}
@@ -505,7 +509,7 @@ pour les Pyrénées.
 
 \subsection{Requête 9 : \og paysage montagne \fg }
 
-\begin{table}[h!!]
+\begin{table}[H]
     \centering
     \caption{Requête 9}
 \begin{tabular}{|l|c|c|c|}
@@ -522,13 +526,13 @@ pour les Pyrénées.
 \end{table}
 
 Ici l’ontologie ajoute plus de bruits qu’autre chose, à cause des sous entités de
-montagnes (montagnes d’Asie et montagnes d’Amérique latines) qui amène alors les mots
-clef “Amérique” et “latine”. L’analyse des paragraphes retournés montrent cependant
+montagnes (montagnes d’Asie et montagnes d’Amérique latine) qui amènent alors les mots
+clefs “Amérique” et “latine”. L’analyse des paragraphes retournés montre cependant
 qu’ils sont pertinents.
 
 \subsection{Requête 10 : \og Glaciers des alpes \fg }
 
-\begin{table}[h!!]
+\begin{table}[H]
     \centering
     \caption{Requête 10}
 \begin{tabular}{|l|c|c|c|}
@@ -549,7 +553,7 @@ sûrement à cause de l’ajout du mot lac qui génère du “bruit”.
 
 \subsection{Requête 11 : \og plongée sous marine \fg }
 
-\begin{table}[h!!]
+\begin{table}[H]
     \centering
     \caption{Requête 11}
 \begin{tabular}{|l|c|c|c|}
@@ -565,11 +569,11 @@ sûrement à cause de l’ajout du mot lac qui génère du “bruit”.
 \end{tabular}
 \end{table}
 
-Rien à signaler, l’ontologie n’amène pas de nouveau mot clefs.
+Rien à signaler, l’ontologie n’amène pas de nouveaux mots clefs.
 
 \subsection{Moyenne}
 
-\begin{table}[h!!]
+\begin{table}[H]
     \centering
     \caption{Moyenne}
 \begin{tabular}{|l|c|c|c|}
@@ -589,12 +593,12 @@ Rien à signaler, l’ontologie n’amène pas de nouveau mot clefs.
 \section{Conclusion}
 
 En conclusion , malgré les améliorations obtenues grâce à l’utilisation de SPARQL
-dans notre projet nous obtenons des résultats qui pourraient être améliorer. En
+dans notre projet nous obtenons des résultats qui pourraient être améliorés. En
 effet, en regardant l’ontologie on remarque que tous les éléments n’ont pas de
 labels. Il faudrait donc retravailler l’ontologie pour obtenir de meilleurs
 résultats. Il faudrait également revoir les index utilisaient pour prendre en
 considération dés l'indexation la sémantique de l’ontologie. Ce n’est pas seulement
-le code qui va nous donner de bon résultats mais aussi l’ontologie sur laquelle nous
+le code qui va nous donner de bons résultats mais aussi l’ontologie sur laquelle nous
 faisons nos requêtes. 
 
 \end{document}
