@@ -19,14 +19,16 @@ import java.util.HashMap;
  * @author strokyl
  */
 public class SemanticQuery {
-	public static final float MAX_SUM_WORD = 1.0f;
+	public static final float MAX_SUM_WORD = 1.3f;
 	public static final float SUB_ENTITY_COEFF = 1.2f;
 	public static final float SOUS_LIEU_COEFF = 1.0f;
-	public static final float LIEU_A_COTER = 0.1f;
-	public static final float SYNONIM_COEFF = 0.8f;
+	public static final float LIEU_A_COTER = 0.3f;
+	public static final float SYNONIM_COEFF = 1.0f;
+	private static final float ANIMAL_DANS_COEFF = 0.3f;
 	public Map<String, Float> vector;
 
 	public SemanticQuery(String query) throws IOException {
+		System.out.println("Query : " + query);
 		vector = new HashMap<String, Float>();
 		Map<String, Float> additionalLabel;
 
@@ -55,17 +57,20 @@ public class SemanticQuery {
 
 			for(String newLabel : SparqlQuery.getSubEntity(label))	{
 				updateAdditionalLabel(newLabel, coeff, additionalLabel);
+				System.out.println("	sous entité : " + newLabel);
 			}
 
 			coeff = SOUS_LIEU_COEFF;
 			for(String newLabel : SparqlQuery.getSousLieu(label))	{
 				updateAdditionalLabel(newLabel, coeff, additionalLabel);
+				System.out.println("	sous lieu : " + newLabel);
 			}
 
 
 			coeff = LIEU_A_COTER;
 			for(String newLabel : SparqlQuery.getLieuACoter(label))	{
 				updateAdditionalLabel(newLabel, coeff, additionalLabel);
+				System.out.println("	lieu a coter : " + newLabel);
 			}
 
 			
@@ -73,6 +78,13 @@ public class SemanticQuery {
 			coeff = SYNONIM_COEFF;
 			for(String newLabel : SparqlQuery.getSynonime(label))	{
 				updateAdditionalLabel(newLabel, coeff, additionalLabel);
+				System.out.println("	synonim : " + newLabel);
+			}
+
+			coeff = ANIMAL_DANS_COEFF;
+			for(String newLabel : SparqlQuery.getAnimalDansLieu(label))	{
+				updateAdditionalLabel(newLabel, coeff, additionalLabel);
+				System.out.println("	animale du lieu : " + newLabel);
 			}
 
 

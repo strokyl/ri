@@ -48,7 +48,6 @@ public class AfficherPertinance {
 
 			System.out.println(String.format("requete %d : %s", q.getId(), q.getQuery()));
 
-			System.out.println("	Expected paragraph : ");
 
 			System.out.println(String.format("	Vecteur de recherche : %s", q.getVector()));
 			System.out.println(String.format("	Pertinance à 5 	: %d /5		%.2f %%", pertinance5, pertinance5 / 5.0 * 100));

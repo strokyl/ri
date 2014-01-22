@@ -43,7 +43,8 @@ public class SparqlQuery {
 "{?object rdfs:label \"%s\"@fr.\n" +
 "?subclass rdfs:subClassOf\n" +
 "?object.\n" +
-"?subclass rdfs:label ?otherkeyword}";
+"?subclass rdfs:label ?otherkeyword.\n" +
+"Filter(?subclass != ?object)}";
 		return makeQuery(query, keyword, "otherkeyword");
 	}
 
@@ -52,32 +53,44 @@ public class SparqlQuery {
 "{ ?seSitueDans rdfs:label \"se situe dans\"@fr. \n" +
 "?object rdfs:label \"%s\"@fr.\n" +
 "?inside ?seSitueDans ?object.\n" +
-"?inside rdfs:label ?labelInside}";
+"?inside rdfs:label ?labelInside.\n" +
+"Filter(?object != ?inside)}";
 		return makeQuery(query, keyword, "labelInside");
 	}
 
 	public static List<String> getLieuACoter(String keyword) {
 		String query = "SELECT ?insideLabel WHERE { ?seSituePresDe rdfs:label \"se situe près de\"@fr. \n" +
-"?object rdfs:label \"France\"@fr.\n" +
+"?object rdfs:label \"%s\"@fr.\n" +
 "?inside ?seSituePresDe ?object.\n" +
-"?inside rdfs:label ?insideLabel\n" +
-"}";
+"?inside rdfs:label ?insideLabel.\n" +
+"Filter(?object != ?inside).}";
 		return makeQuery(query, keyword, "insideLabel");
 	}
 
 	public static List<String> getSynonime(String keyword) {
 		String query = "SELECT ?other_label\n" +
 "WHERE {\n" +
-"  ?object rdfs:label \"balade\"@fr.\n" +
-"  ?object rdfs:label ?other_label\n" +
-"}";
-		return makeQuery(query, null, "other_label");
+"  ?object rdfs:label \"%s\"@fr.\n" +
+"  ?object rdfs:label ?other_label.\n" +
+"  Filter(?other_label != \""+keyword+"\"@fr)}";
+		return makeQuery(query, keyword, "other_label");
 
+	}
+
+	public static List<String> getAnimalDansLieu(String keyword) {
+		String query = "SELECT ?label\n" +
+"WHERE {\n" +
+"  ?object rdfs:label \"%s\"@fr.\n" +
+"  ?vitDans rdfs:label \"vit dans\"@fr.\n" +
+"  ?oVitDans ?vitDans ?object.\n" +
+"  ?oVitDans rdfs:label ?label\n" +
+"}";
+		return makeQuery(query, keyword, "label");
+		
 	}
 	public static List<String> getAllLabel() {
 		String query = "SELECT ?label WHERE { ?object rdfs:label ?label}";
 		return makeQuery(query, null, "label");
 	}
-
 	
 }
